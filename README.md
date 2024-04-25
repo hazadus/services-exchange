@@ -16,40 +16,18 @@ SECRET_KEY="long-random-string"
 DEBUG=True
 ```
 
-Далее, все команды выполняются из корневой директории репозитория.
-
 #### Запуск в докере
 
 ```bash
 make dev_up
-```
-
-### Запуск в виртуальном окружении
-
-Создать виртуальное окружение и установить зависимости:
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r src/requirements.txt
-```
-
-Применить миграции базы данных:
-
-```bash
-python src/manage.py migrate
-```
-
-Создать суперпользователя:
-
-```bash
-python src/manage.py createsuperuser
-```
-
-Запустить сервер:
-
-```bash
-make runserver
+# или
+docker compose -f docker-compose.dev.yml up
+# Применить миграции
+docker exec -it web python -m manage migrate
+# Создать суперпользователя
+docker exec -it web python -m manage createsuperuser
+# Остановить
+docker compose -f docker-compose.dev.yml down
 ```
 
 Приложение будет доступно по адресу [http://127.0.0.1:8000/](http://127.0.0.1:8000/).

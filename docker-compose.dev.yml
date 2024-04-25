@@ -6,6 +6,14 @@ services:
     command: python -m manage runserver 0.0.0.0:8000
     volumes:
       - ./src:/code
+    environment:
+      - "DEBUG=True"
+      - "DB_NAME=postgres"
+      - "DB_USER=postgres"
+      - "DB_PASSWORD=postgres"
+      - "DB_HOST=db"
+      - "DB_PORT=5432"
+      - "CELERY_BROKER_URL=amqp://rmuser:rmpassword@rabbitmq:5672//"
     ports:
       - "8000:8000"
     depends_on:
