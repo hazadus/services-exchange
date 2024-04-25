@@ -2,6 +2,7 @@ asgiref==3.8.1
 black==24.4.1
 click==8.1.7
 Django==5.0.4
+django-allauth==0.62.1
 environs==11.0.0
 marshmallow==3.21.1
 mypy-extensions==1.0.0

@@ -5,6 +5,14 @@
 пользователей. Заказчики могут размещать сведения о своих проектах, а исполнители – предлагать свои услуги для
 их реализации.
 
+## Используемые библиотеки и инструменты
+
+- [Django](https://docs.djangoproject.com/)
+    - [django-allauth](https://pypi.org/project/django-allauth/): Integrated set of Django applications addressing authentication, registration, account management as well as 3rd party (social) account authentication.
+- Misc:
+  - [environs](https://pypi.org/project/environs/): `environs` is a Python library for parsing environment variables. 
+
+
 ## Запуск приложения
 
 ### В режиме разработки
