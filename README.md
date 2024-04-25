@@ -16,12 +16,25 @@ SECRET_KEY="long-random-string"
 DEBUG=True
 ```
 
+Далее, все команды выполняются из корневой директории репозитория.
 Создать виртуальное окружение и установить зависимости:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -r src/requirements.txt
+```
+
+Применить миграции базы данных:
+
+```bash
+python src/manage.py migrate
+```
+
+Создать суперпользователя:
+
+```bash
+python src/manage.py createsuperuser
 ```
 
 Запустить сервер:
