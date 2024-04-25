@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  web:
+    container_name: "web"
+    build: ./src
+    command: python -m manage runserver 0.0.0.0:8000
+    volumes:
+      - ./src:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  db:
+    container_name: "db"
+    image: postgres:16
+    volumes:
+      - ./docker/postgres:/var/lib/postgresql/data/
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
