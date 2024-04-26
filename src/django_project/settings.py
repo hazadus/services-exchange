@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
+from django.urls import reverse_lazy
 from environs import Env
 
 env = Env()
@@ -156,7 +157,7 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-# LOGIN_REDIRECT_URL = reverse_lazy("feeds:feed_list")
+LOGIN_REDIRECT_URL = reverse_lazy("core:index")
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_USERNAME_REQUIRED = False
@@ -165,5 +166,5 @@ ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET = True
-# ACCOUNT_SIGNUP_REDIRECT_URL = reverse_lazy("feeds:feed_list")
-# ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy("account_login")
+ACCOUNT_SIGNUP_REDIRECT_URL = reverse_lazy("core:index")
+ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy("account_login")
