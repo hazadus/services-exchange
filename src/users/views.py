@@ -10,7 +10,18 @@ class UserProfileView(
     LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView
 ):
     model = CustomUser
-    fields = ["username", "first_name", "last_name", "profile_image"]
+    fields = [
+        "username",
+        "first_name",
+        "last_name",
+        "profile_image",
+        "speciality",
+        "description",
+        "skills",
+        "country",
+        "city",
+        "phone",
+    ]
     template_name = "users/user_update.html"
     success_message = "Информация пользователя успешно изменена!"
 

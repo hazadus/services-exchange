@@ -31,6 +31,7 @@ class CustomUser(AbstractUser):
             max_length=32,
         ),
         verbose_name="ваши навыки",
+        help_text="Cписок ваших навыков через запятую",
         null=True,
         blank=True,
     )
@@ -48,6 +49,7 @@ class CustomUser(AbstractUser):
     )
     phone = models.CharField(
         verbose_name="телефон",
+        help_text="Номер телефона в формате +7(812)000-00-00",
         max_length=64,
         null=True,
         blank=True,
