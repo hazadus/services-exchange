@@ -11,22 +11,41 @@
   <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
 </head>
 
-<body>
-  <header>
-    <a href="{% url "core:index" %}">Биржа Услуг</a> |
-    {% if user.is_authenticated %}
-      {{ user.username }} |
-      {% if user.is_superuser %}
-        <a href="/admin/">Админка</a> |
-      {% endif %}
-      <a href="{% url 'account_logout' %}">Выход</a>
-    {% else %}
-      <a href="{% url 'account_signup' %}">Регистрация</a> | <a href="{% url 'account_login' %}">Вход</a>
-    {% endif %}
-  </header>
-  <div>
-    {% block content %}
-    {% endblock content %}
+<body class="bg-white">
+  <div class="container flex mx-auto mt-0 shadow-md min-h-screen">
+    <div class="flex flex-col w-full">
+      <!-- Top Navbar -->
+      <div class="h-16 shrink-0 bg-gray-300 w-fullshadow flex items-center">
+        <!-- App title -->
+        <a href="{% url "core:index" %}" class="text-2xl text-gray-900 mx-4">Биржа Услуг</a>
+
+        <!-- Menu -->
+        <div class="flex-1 flex justify-center items-center">
+          <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Услуги</a>
+          <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Проекты</a>
+        </div>
+
+        <!-- User menu -->
+        <div class="px-4 flex">
+          {% if user.is_authenticated %}
+            <span class="p-2">{{ user.username }}</span>
+            {% if user.is_superuser %}
+              <a href="/admin/" class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Админка</a>
+            {% endif %}
+            <a href="{% url 'account_logout' %}" class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Выход</a>
+          {% else %}
+            <a href="{% url 'account_signup' %}" class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Регистрация</a>
+            <a href="{% url 'account_login' %}" class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Вход</a>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="p-8">
+        {% block content %}
+        {% endblock content %}
+      </div>
+    </div>
   </div>
 </body>
 
