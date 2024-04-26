@@ -136,6 +136,11 @@ TIME_ZONE = "Europe/Moscow"
 USE_I18N = True
 USE_TZ = True
 
+# Media
+
+MEDIA_URL = "/uploads/"
+MEDIA_ROOT = BASE_DIR / "uploads"
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -168,3 +173,49 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_SIGNUP_REDIRECT_URL = reverse_lazy("core:index")
 ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy("account_login")
+
+# Logging
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {"require_debug": {"()": "django.utils.log.RequireDebugTrue"}},
+    "formatters": {
+        "basic": {
+            "format": "%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+    },
+    "handlers": {
+        "console_dev": {
+            "class": "logging.StreamHandler",
+            "formatter": "basic",
+            "filters": ["require_debug"],
+        },
+        "django_file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": "django_debug.log",
+            "maxBytes": 1024 * 1024 * 10,
+            "backupCount": 3,
+            "formatter": "basic",
+        },
+        "server_file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": "server_debug.log",
+            "maxBytes": 1024 * 1024 * 10,
+            "backupCount": 3,
+            "formatter": "basic",
+        },
+    },
+    "loggers": {
+        "": {
+            "handlers": ["console_dev", "django_file"],
+            "level": "DEBUG" if DEBUG else "INFO",
+        },
+        "django.request": {
+            "handlers": ["console_dev", "server_file"],
+            "level": "DEBUG" if DEBUG else "INFO",
+            "propagate": False,
+        },
+    },
+}
