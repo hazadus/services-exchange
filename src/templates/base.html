@@ -21,14 +21,19 @@
 
         <!-- Menu -->
         <div class="flex-1 flex justify-center items-center">
+          <a class="p-2 bg-gray-200 mx-0.5 rounded-lg font-medium">Я покупатель</a>
+          <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Я продавец</a>
           <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Услуги</a>
           <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Проекты</a>
         </div>
 
         <!-- User menu -->
-        <div class="px-4 flex">
+        <div class="px-4 flex items-center">
           {% if user.is_authenticated %}
-            <span class="p-2">{{ user.username }}</span>
+            {% if user.profile_image %}
+              <img src="{{ user.profile_image.url }}" class="h-8 w-8 rounded-lg mx-1" alt="{{ user.username }}">
+            {% endif %}
+            <span class="p-2 font-medium">{{ user.username }}</span>
             {% if user.is_superuser %}
               <a href="/admin/" class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Админка</a>
             {% endif %}
