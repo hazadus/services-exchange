@@ -18,8 +18,19 @@ class CustomUserAdmin(UserAdmin):
     # Which fields to show when editing user via admin panel:
     fieldsets = UserAdmin.fieldsets + (
         (
-            None,
-            {"fields": ("profile_image",)},
+            "Дополнительные сведения",
+            {
+                "fields": (
+                    "profile_image",
+                    "speciality",
+                    "description",
+                    "skills",
+                    "country",
+                    "city",
+                    "phone",
+                    "balance",
+                )
+            },
         ),
     )
     # Which fields to show when creating user via admin panel:
