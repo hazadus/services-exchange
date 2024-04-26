@@ -68,3 +68,16 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+
+    @property
+    def full_name(self) -> str | None:
+        return f"{self.first_name} {self.last_name}".strip()
+
+    @property
+    def location(self) -> str | None:
+        if self.country and self.city:
+            return f"{self.city}, {self.country}".strip()
+        elif self.city:
+            return self.city.strip()
+        elif self.country:
+            return self.country.strip()
