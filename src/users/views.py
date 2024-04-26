@@ -1,12 +1,32 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import Http404
 from django.urls import reverse_lazy
-from django.views.generic import UpdateView
+from django.views.generic import TemplateView, UpdateView
 
 from users.models import CustomUser
+from users.selectors import get_user_by_username
 
 
-class UserProfileView(
+class PublicUserProfileView(TemplateView):
+    template_name = "users/user_public_profile.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        username = context.get("username", None)
+        if username is None:
+            raise Http404
+
+        public_user = get_user_by_username(username)
+        if public_user is None:
+            raise Http404
+
+        context["public_user"] = public_user
+        return context
+
+
+class UpdateUserView(
     LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView
 ):
     model = CustomUser
