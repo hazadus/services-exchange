@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     # Third-party apps
     "allauth",
     "allauth.account",
+    "crispy_forms",
+    "crispy_tailwind",
     # Local apps
     "users.apps.UsersConfig",
     "core.apps.CoreConfig",
@@ -223,3 +225,8 @@ LOGGING = {
         },
     },
 }
+
+# Crispy Forms
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+CRISPY_TEMPLATE_PACK = "tailwind"

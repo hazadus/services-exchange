@@ -11,6 +11,7 @@
     - [django-allauth](https://pypi.org/project/django-allauth/): Integrated set of Django applications addressing authentication, registration, account management as well as 3rd party (social) account authentication.
 - Оформление:
   - [Tailwind CSS](https://tailwindcss.com/)
+  - [crispy-tailwind](https://django-crispy-forms.github.io/crispy-tailwind/getting_started.html#installation)
 - Прочее:
   - [environs](https://pypi.org/project/environs/): `environs` is a Python library for parsing environment variables. 
 
