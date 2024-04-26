@@ -166,3 +166,4 @@ misc/cats/
 
 *.bin
 src/uploads/
+node_modules/
