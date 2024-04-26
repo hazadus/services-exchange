@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     # Local apps
     "users.apps.UsersConfig",
     "core.apps.CoreConfig",
+    "exchange.apps.ExchangeConfig",
 ]
 
 MIDDLEWARE = [
