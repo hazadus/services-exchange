@@ -21,8 +21,8 @@
 
         <!-- Menu -->
         <div class="flex-1 flex justify-center items-center">
-          <a class="p-2 bg-gray-200 mx-0.5 rounded-lg font-medium">Я покупатель</a>
-          <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Я продавец</a>
+          <a class="{% if user_mode == 'buyer' %}bg-gray-200 font-medium{% else %}hover:bg-gray-200{% endif %} p-2 mx-0.5 rounded-lg" href="{% url 'exchange:set_user_mode' %}?mode=buyer&redirect_to={{ request.path }}">Я покупатель</a>
+          <a class="{% if user_mode == 'seller' %}bg-gray-200 font-medium{% else %}hover:bg-gray-200{% endif %} p-2 mx-0.5 rounded-lg" href="{% url 'exchange:set_user_mode' %}?mode=seller&redirect_to={{ request.path }}">Я продавец</a>
           <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Услуги</a>
           <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Проекты</a>
         </div>
