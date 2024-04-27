@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1 class="text-2xl font-semibold mb-2">{{ service.title }}</h1>
+  <div class="text-gray-500 mb-2">
+    <a href="{% url 'services:list' %}?category_id={{ service.category.pk }}" class="hover:underline">
+      {{ service.category }}
+    </a>
+  </div>
+  <div>Исполнитель: {{ service.provider.username }}</div>
+{% endblock content %}

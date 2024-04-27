@@ -1,8 +1,8 @@
-from django.views.generic import ListView
+from django.views.generic import DetailView, ListView
 from exchange.selectors import category_get_by_id
 
 from services.models import Service
-from services.selectors import service_list
+from services.selectors import service_get_by_id, service_list
 
 
 class ServiceListView(ListView):
@@ -23,3 +23,19 @@ class ServiceListView(ListView):
             context["category"] = category
 
         return context
+
+
+class ServiceDetailView(DetailView):
+    model = Service
+    template_name = "services/service_detail.html"
+
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get(self.pk_url_kwarg)
+
+        if pk is None:
+            raise AttributeError(
+                "Detail view %s must be called with an object "
+                "pk in the URLconf." % self.__class__.__name__
+            )
+
+        return service_get_by_id(service_id=pk)

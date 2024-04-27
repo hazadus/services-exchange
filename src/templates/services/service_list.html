@@ -30,7 +30,11 @@
               <!-- Cover -->
               <div class="w-full h-48 bg-gray-50 mb-1"></div>
               <!-- Title -->
-              <div class="mb-1 p-1">{{ service.title }}</div>
+              <div class="mb-1 p-1">
+                <a href="{% url 'services:detail' service.pk %}" class="hover:underline">
+                  {{ service.title }}
+                </a>
+              </div>
               <!-- Category and price -->
               <div class="flex border-b border-gray-100">
                 {% if not category %}
