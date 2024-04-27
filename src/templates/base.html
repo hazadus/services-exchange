@@ -25,6 +25,8 @@
             <!-- Переключение покупатель / продавец -->
             <a class="{% if user_mode == 'buyer' %}bg-gray-200 font-medium{% else %}hover:bg-gray-200{% endif %} p-2 mx-0.5 rounded-lg" href="{% url 'exchange:set_user_mode' %}?mode=buyer&redirect_to={{ request.path }}">Я покупатель</a>
             <a class="{% if user_mode == 'seller' %}bg-gray-200 font-medium{% else %}hover:bg-gray-200{% endif %} p-2 mx-0.5 rounded-lg" href="{% url 'exchange:set_user_mode' %}?mode=seller&redirect_to={{ request.path }}">Я продавец</a>
+            <!-- Рубрики -->
+            <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg" href="{% url 'exchange:category_list' %}">Рубрики</a>
             {% if user_mode == 'buyer' %}
               <!-- "Я покупатель" -->
               <!-- Полный каталог услуг: /exchange/services/ -->
@@ -44,6 +46,7 @@
             {% endif %}
           {% else %}
             <!-- Публичные разделы сайта -->
+            <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg" href="{% url 'exchange:category_list' %}">Рубрики</a>
             <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Услуги</a>
             <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Биржа</a>
           {% endif %}
