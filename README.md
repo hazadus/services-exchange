@@ -9,6 +9,7 @@
 
 - [Django](https://docs.djangoproject.com/)
     - [django-allauth](https://pypi.org/project/django-allauth/): Integrated set of Django applications addressing authentication, registration, account management as well as 3rd party (social) account authentication.
+    - [django-debug-toolbar](https://django-debug-toolbar.readthedocs.io/en/latest/): Best debugging tool for Django.
 - Оформление:
   - [Tailwind CSS](https://tailwindcss.com/)
   - [crispy-tailwind](https://django-crispy-forms.github.io/crispy-tailwind/getting_started.html#installation)

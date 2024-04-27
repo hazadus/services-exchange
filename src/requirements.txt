@@ -5,6 +5,7 @@ crispy-tailwind==1.0.3
 Django==5.0.4
 django-allauth==0.62.1
 django-crispy-forms==2.1
+django-debug-toolbar==4.3.0
 environs==11.0.0
 marshmallow==3.21.1
 mypy-extensions==1.0.0
