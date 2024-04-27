@@ -30,7 +30,7 @@
             {% if user_mode == 'buyer' %}
               <!-- "Я покупатель" -->
               <!-- Полный каталог услуг: /exchange/services/ -->
-              <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Услуги</a>
+              <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg" href="{% url 'services:list' %}">Услуги</a>
               <!-- То, что заказал пользователь: /orders/ -->
               <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Мои заказы</a>
               <!-- Проекты пользователя: /projects/ -->

@@ -1,12 +1,64 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1 class="text-2xl font-semibold mb-4">Каталог всех услуг на сайте</h1>
+  {% if category %}
+    <div class="text-gray-500 mb-4">{{ category }}</div>
+    <h1 class="text-2xl font-semibold mb-8">{{ category.title }}</h1>
+  {% else %}
+    <h1 class="text-2xl font-semibold mb-8">Каталог всех услуг на сайте</h1>
+  {% endif %}
 
-  <h2>Рубрика {{ category }}</h2>
+  <div class="text-gray-500 mb-4">{{ service_list.count }} результатов</div>
+  <div class="flex flex-col grid grid-cols-12 gap-5">
+    <!-- Left column 1/3 - filters -->
+    <div class="col-span-3 flex flex-col">
+      <div class="p-4 bg-gray-100 rounded-md">
+        <h2 class="text-xl font-medium">Рубрики</h2>
+        <div>...</div>
+        <div>...</div>
+        <div>...</div>
+        <div>...</div>
+      </div>
+    </div>
 
-  {% for service in service_list %}
-    {{ service }} – {{ service.category }}
-  {% endfor %}
-
+    <!-- Right column 3/4 - services -->
+    <div class="col-span-9">
+      {% if service_list.count %}
+        <div class="grid grid-cols-3 gap-5">
+          {% for service in service_list %}
+            <div class="border border-gray-100 p-0 flex flex-col">
+              <!-- Cover -->
+              <div class="w-full h-48 bg-gray-50 mb-1"></div>
+              <!-- Title -->
+              <div class="mb-1 p-1">{{ service.title }}</div>
+              <!-- Category and price -->
+              <div class="flex border-b border-gray-100">
+                {% if not category %}
+                  <div class="text-sm text-gray-500 p-1">
+                    <a class="hover:underline" href="{% url 'services:list' %}?category_id={{ service.category.pk }}">
+                      {{ service.category.title }}
+                    </a>
+                  </div>
+                {% endif %}
+                <div class="flex-1 text-right text-xl text-green-500 font-semibold p-1">{{ service.price }} ₽</div>
+              </div>
+              <!-- Provider info -->
+              <div class="p-1 flex items-center">
+                {% if service.provider.profile_image %}
+                  <a href="{% url 'users:public_profile' service.provider.username %}">
+                    <img src="{{ service.provider.profile_image.url }}" class="h-8 w-8 rounded-lg mx-1" alt="{{ service.provider.username }}">
+                  </a>
+                {% endif %}
+                <span class="p-2 font-medium">
+                  <a href="{% url 'users:public_profile' service.provider.username %}" class="hover:underline">{{ service.provider.username }}</a>
+                </span>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        {% include "alert.html" with message="Не найдено ни одной услуги, удовлетворяющей запросу. Попробуйте изменить фильтры, или выбрать другую рубрику." style="info" %}
+      {% endif %}
+    </div>
+  </div>
 {% endblock content %}
