@@ -1,4 +1,8 @@
 from django.shortcuts import redirect
+from django.views.generic import ListView
+
+from exchange.models import Category
+from exchange.selectors import category_list
 
 
 def set_user_mode(request):
@@ -15,3 +19,11 @@ def set_user_mode(request):
     request.session["user_mode"] = mode
 
     return redirect(redirect_to)
+
+
+class CategoryListView(ListView):
+    model = Category
+    template_name = "exchange/category_list.html"
+
+    def get_queryset(self):
+        return category_list()

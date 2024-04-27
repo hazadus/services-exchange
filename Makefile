@@ -1,6 +1,7 @@
 runserver:
 	python src/manage.py runserver
 format:
+	black .
 	ruff check . -n --select I --fix
 css:
 	npx tailwindcss -i ./src/static/src/input.css -o ./src/static/styles.css

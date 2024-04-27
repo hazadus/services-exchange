@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1 class="text-2xl font-semibold mb-4">Список всех рубрик на сайте</h1>
+
+  {% for top_category in category_list %}
+    {% if top_category.parent == None %}
+      <section class="mb-8">
+        <h2 class="text-xl font-semibold mb-2">{{ top_category }}</h2>
+        <div class="grid grid-cols-4 gap-5">
+          {% for mid_category in top_category.subcategories.all %}
+            <div class="border border-gray-300 shadow-md rounded-lg p-4">
+              <h3 class="font-medium mb-2">{{ mid_category.title }}</h3>
+              {% for low_category in mid_category.subcategories.all %}
+                <a class="block hover:underline">{{ low_category.title }}</a>
+              {% endfor %}
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+    {% endif %}
+  {% endfor %}
+{% endblock content %}
