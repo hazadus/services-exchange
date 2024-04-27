@@ -38,7 +38,21 @@
   </div>
 
   <h1 class="text-2xl font-semibold mb-4">Услуги пользователя</h1>
-  <p class="mb-8">Пока пользователь не разместил никаких услуг.</p>
+  {% if public_user.services.count == 0 %}
+    <p class="mb-8">Пока пользователь не разместил никаких услуг.</p>
+  {% else %}
+    <div class="flex flex-col mb-8">
+      {% for service in public_user.services.all %}
+        <div>
+          <a href="{% url 'services:detail' service.pk %}" class="hover:underline">
+            {{ service.title }}
+          </a> &middot;
+          <a href="{% url 'services:list' %}?category_id={{ service.category.pk }}" class="text-gray-500 hover:underline">{{ service.category.title }}</a> &middot;
+          {{ service.price }} ₽ &middot; за {{ service.term }} дн.
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
 
   <h1 class="text-2xl font-semibold mb-4">Отзывы о {{ public_user.username }}</h1>
   <p class="mb-8">Пока нет ни одного отзыва о работе пользователя.</p>
