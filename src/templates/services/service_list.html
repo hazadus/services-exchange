@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1 class="text-2xl font-semibold mb-4">Каталог всех услуг на сайте</h1>
+
+  <h2>Рубрика {{ category }}</h2>
+
+  {% for service in service_list %}
+    {{ service }} – {{ service.category }}
+  {% endfor %}
+
+{% endblock content %}

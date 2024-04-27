@@ -11,3 +11,12 @@ def category_list() -> Iterable[Category]:
         .prefetch_related("subcategories__subcategories")
         .all()
     )
+
+
+def category_get_by_id(category_id: int) -> Category | None:
+    return (
+        Category.objects.filter(id=category_id)
+        .prefetch_related("parent")
+        .prefetch_related("parent__parent")
+        .first()
+    )
