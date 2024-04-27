@@ -21,10 +21,32 @@
 
         <!-- Menu -->
         <div class="flex-1 flex justify-center items-center">
-          <a class="{% if user_mode == 'buyer' %}bg-gray-200 font-medium{% else %}hover:bg-gray-200{% endif %} p-2 mx-0.5 rounded-lg" href="{% url 'exchange:set_user_mode' %}?mode=buyer&redirect_to={{ request.path }}">Я покупатель</a>
-          <a class="{% if user_mode == 'seller' %}bg-gray-200 font-medium{% else %}hover:bg-gray-200{% endif %} p-2 mx-0.5 rounded-lg" href="{% url 'exchange:set_user_mode' %}?mode=seller&redirect_to={{ request.path }}">Я продавец</a>
-          <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Услуги</a>
-          <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Проекты</a>
+          {% if user.is_authenticated %}
+            <!-- Переключение покупатель / продавец -->
+            <a class="{% if user_mode == 'buyer' %}bg-gray-200 font-medium{% else %}hover:bg-gray-200{% endif %} p-2 mx-0.5 rounded-lg" href="{% url 'exchange:set_user_mode' %}?mode=buyer&redirect_to={{ request.path }}">Я покупатель</a>
+            <a class="{% if user_mode == 'seller' %}bg-gray-200 font-medium{% else %}hover:bg-gray-200{% endif %} p-2 mx-0.5 rounded-lg" href="{% url 'exchange:set_user_mode' %}?mode=seller&redirect_to={{ request.path }}">Я продавец</a>
+            {% if user_mode == 'buyer' %}
+              <!-- "Я покупатель" -->
+              <!-- Полный каталог услуг: /exchange/services/ -->
+              <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Услуги</a>
+              <!-- То, что заказал пользователь: /orders/ -->
+              <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Мои заказы</a>
+              <!-- Проекты пользователя: /projects/ -->
+              <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Мои проекты</a>
+            {% else %}
+              <!-- "Я продавец" -->
+              <!-- "Биржа" - полный каталог проектов: /exchange/projects/ -->
+              <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Биржа</a>
+              <!-- То, что заказали у меня: /orders/ -->
+              <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Заказы</a>
+              <!-- Услуги, которые предлагает пользователь: /services/ -->
+              <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Мои услуги</a>
+            {% endif %}
+          {% else %}
+            <!-- Публичные разделы сайта -->
+            <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Услуги</a>
+            <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Биржа</a>
+          {% endif %}
         </div>
 
         <!-- User menu -->
