@@ -27,6 +27,16 @@ class ServiceListView(ListView):
         return context
 
 
+class ServiceMyListView(LoginRequiredMixin, ListView):
+    """Услуги залогиненного пользователя – страница "Мои услуги"."""
+
+    model = Service
+    template_name = "services/service_my_list.html"
+
+    def get_queryset(self):
+        return service_list(provider_id=self.request.user.id)
+
+
 class ServiceDetailView(DetailView):
     model = Service
     template_name = "services/service_detail.html"
