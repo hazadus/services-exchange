@@ -5,6 +5,7 @@ from services.views import (
     ServiceDetailView,
     ServiceListView,
     ServiceMyListView,
+    ServiceUpdateView,
 )
 
 app_name = "services"
@@ -13,4 +14,5 @@ urlpatterns = [
     path("my/", ServiceMyListView.as_view(), name="my_list"),
     path("<int:pk>/", ServiceDetailView.as_view(), name="detail"),
     path("create/", ServiceCreateView.as_view(), name="create"),
+    path("update/<int:pk>/", ServiceUpdateView.as_view(), name="update"),
 ]
