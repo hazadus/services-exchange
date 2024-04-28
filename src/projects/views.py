@@ -1,7 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 from exchange.selectors import category_get_by_id, category_list_only_available
 
 from projects.models import Project
@@ -106,3 +112,14 @@ class ProjectUpdateView(
 
     def get_success_url(self):
         return reverse_lazy("projects:update", kwargs={"pk": self.get_object().pk})
+
+
+class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Project
+    template_name = "projects/project_delete.html"
+    success_url = reverse_lazy("projects:my_list")
+
+    def test_func(self):
+        """Only allow owner of the project to delete it."""
+        project = self.get_object()
+        return project.customer == self.request.user
