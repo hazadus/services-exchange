@@ -1,12 +1,15 @@
-from typing import Iterable
+from django.db.models import QuerySet
 
 from services.models import Service
 
 
 def service_list(
     category_id: int | None = None, provider_id: int | None = None
-) -> Iterable[Service]:
-    queryset = Service.objects.select_related("category")
+) -> QuerySet:
+    queryset = Service.objects.select_related(
+        "category", "category__parent", "category__parent__parent",
+        "provider"
+    )
 
     if category_id:
         queryset = queryset.filter(category_id=category_id)
