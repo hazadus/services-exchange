@@ -15,3 +15,12 @@ def project_list(
         queryset = queryset.filter(customer_id=customer_id)
 
     return queryset.all()
+
+
+def project_get_by_id(project_id: int) -> Project | None:
+    return (
+        Project.objects.filter(id=project_id)
+        .select_related("category__parent__parent")
+        .select_related("customer")
+        .first()
+    )

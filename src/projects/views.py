@@ -1,10 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, DetailView, ListView
 from exchange.selectors import category_list_only_available
 
 from projects.models import Project
-from projects.selectors import project_list
+from projects.selectors import project_get_by_id, project_list
 
 
 class ProjectMyListView(LoginRequiredMixin, ListView):
@@ -15,6 +15,22 @@ class ProjectMyListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return project_list(customer_id=self.request.user.id)
+
+
+class ProjectDetailView(DetailView):
+    model = Project
+    template_name = "projects/project_detail.html"
+
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get(self.pk_url_kwarg)
+
+        if pk is None:
+            raise AttributeError(
+                "Detail view %s must be called with an object "
+                "pk in the URLconf." % self.__class__.__name__
+            )
+
+        return project_get_by_id(project_id=pk)
 
 
 class ProjectCreateView(LoginRequiredMixin, CreateView):

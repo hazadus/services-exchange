@@ -10,7 +10,7 @@
     {% for project in project_list %}
       <div class="p-4 border border-gray-100 mb-2 shadow-md">
         <div class="mb-2">
-          <a href="" class="text-xl font-medium hover:underline">{{ project.title }}</a>
+          <a href="{% url 'projects:detail' project.pk %}" class="text-xl font-medium hover:underline">{{ project.title }}</a>
         </div>
         <div class="mb-1">
           <a href="{% url 'services:list' %}?category_id={{ service.category.pk }}" class="text-gray-500 hover:underline">

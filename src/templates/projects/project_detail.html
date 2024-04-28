@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1 class="text-2xl font-semibold mb-2">{{ project.title }}</h1>
+  <div class="text-gray-500 mb-2">
+    <a href="" class="hover:underline">
+      {{ project.category }}
+    </a>
+  </div>
+  <div>Заказчик: {{ project.customer.username }}</div>
+
+  <div class="mb-4">
+    <a href="" class="inline-flex items-center px-5 py-2.5 mt-4 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800">Изменить</a>
+    <a href="" class="inline-flex items-center px-5 py-2.5 mt-4 text-sm font-medium text-center text-white bg-red-700 rounded-lg focus:ring-4 focus:ring-red-200 hover:bg-red-800">Удалить</a>
+  </div>
+
+  <h2 class="text-xl font-medium mb-2">Что нужно сделать</h2>
+  <p>
+    {{ project.description }}
+  </p>
+{% endblock content %}
