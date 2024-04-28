@@ -1,9 +1,20 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView
 from exchange.selectors import category_list_only_available
 
 from projects.models import Project
+from projects.selectors import project_list
+
+
+class ProjectMyListView(LoginRequiredMixin, ListView):
+    """Проекты залогиненного пользователя – страница "Мои проекты"."""
+
+    model = Project
+    template_name = "projects/project_my_list.html"
+
+    def get_queryset(self):
+        return project_list(customer_id=self.request.user.id)
 
 
 class ProjectCreateView(LoginRequiredMixin, CreateView):
