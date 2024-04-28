@@ -8,12 +8,12 @@
 
   <div>
     {% for service in service_list %}
-      <div class="p-4 border border-gray-100">
-        <h2 class="text-xl font-medium mb-1 hover:underline">
-          <a href="{% url 'services:detail' service.pk %}">{{ service.title }}</a>
-        </h2>
-        <div class="text-gray-500 mb-1 hover:underline">
-          <a href="{% url 'services:list' %}?category_id={{ service.category.pk }}">
+      <div class="p-4 border border-gray-100 mb-2 shadow-md">
+        <div class="mb-2">
+          <a href="{% url 'services:detail' service.pk %}" class="text-xl font-medium hover:underline">{{ service.title }}</a>
+        </div>
+        <div class="mb-1">
+          <a href="{% url 'services:list' %}?category_id={{ service.category.pk }}" class="text-gray-500 hover:underline">
             {{ service.category }}
           </a>
         </div>
