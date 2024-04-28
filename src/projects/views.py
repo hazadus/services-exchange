@@ -1,6 +1,7 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView, UpdateView
 from exchange.selectors import category_get_by_id, category_list_only_available
 
 from projects.models import Project
@@ -80,3 +81,28 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse_lazy("projects:detail", kwargs={"pk": self.object.pk})
+
+
+class ProjectUpdateView(
+    LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView
+):
+    model = Project
+    fields = [
+        "title",
+        "category",
+        "is_active",
+        "description",
+        "price",
+        "is_higher_price_allowed",
+        "max_price",
+    ]
+    template_name = "projects/project_update.html"
+    success_message = "Сведения о проекте успешно изменены."
+
+    def test_func(self):
+        """Only allow user to update own project."""
+        user = self.get_object().customer
+        return user == self.request.user
+
+    def get_success_url(self):
+        return reverse_lazy("projects:update", kwargs={"pk": self.get_object().pk})

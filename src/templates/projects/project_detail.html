@@ -14,7 +14,7 @@
   <div>Заказчик: {{ project.customer.username }}</div>
 
   <div class="mb-4">
-    <a href="" class="inline-flex items-center px-5 py-2.5 mt-4 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800">Изменить</a>
+    <a href="{% url 'projects:update' project.pk %}" class="inline-flex items-center px-5 py-2.5 mt-4 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800">Изменить</a>
     <a href="" class="inline-flex items-center px-5 py-2.5 mt-4 text-sm font-medium text-center text-white bg-red-700 rounded-lg focus:ring-4 focus:ring-red-200 hover:bg-red-800">Удалить</a>
   </div>
 
