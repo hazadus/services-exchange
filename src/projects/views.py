@@ -1,10 +1,30 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView
-from exchange.selectors import category_list_only_available
+from exchange.selectors import category_get_by_id, category_list_only_available
 
 from projects.models import Project
 from projects.selectors import project_get_by_id, project_list
+
+
+class ProjectListView(ListView):
+    model = Project
+    template_name = "projects/project_list.html"
+
+    def get_queryset(self):
+        category_id = self.request.GET.get("category_id", None)
+        return project_list(category_id=category_id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        category_id = self.request.GET.get("category_id", None)
+
+        if category_id is not None:
+            category = category_get_by_id(category_id)
+            context["category"] = category
+
+        return context
 
 
 class ProjectMyListView(LoginRequiredMixin, ListView):
@@ -58,5 +78,5 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
         service.save()
         return super().form_valid(form)
 
-    # def get_success_url(self):
-    #     return reverse_lazy("projects:detail", kwargs={"pk": self.object.pk})
+    def get_success_url(self):
+        return reverse_lazy("projects:detail", kwargs={"pk": self.object.pk})

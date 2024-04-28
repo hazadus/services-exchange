@@ -38,7 +38,7 @@
               <!-- Услуги, которые предлагает пользователь -->
               <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg" href="{% url 'services:my_list' %}">Мои услуги</a>
               <!-- "Биржа" - полный каталог проектов: /exchange/projects/ -->
-              <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Биржа</a>
+              <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg" href="{% url 'projects:list' %}">Биржа</a>
               <!-- То, что заказали у меня: /orders/ -->
               <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Заказы</a>
             {% endif %}

@@ -13,7 +13,7 @@
           <a href="{% url 'projects:detail' project.pk %}" class="text-xl font-medium hover:underline">{{ project.title }}</a>
         </div>
         <div class="mb-1">
-          <a href="{% url 'services:list' %}?category_id={{ service.category.pk }}" class="text-gray-500 hover:underline">
+          <a href="{% url 'projects:list' %}?category_id={{ project.category.pk }}" class="text-gray-500 hover:underline">
             {{ project.category }}
           </a>
         </div>

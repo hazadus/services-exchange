@@ -6,7 +6,9 @@ from projects.models import Project
 def project_list(
     category_id: int | None = None, customer_id: int | None = None
 ) -> QuerySet:
-    queryset = Project.objects.select_related("category", "customer")
+    queryset = Project.objects.select_related(
+        "category", "category__parent", "category__parent__parent", "customer"
+    )
 
     if category_id:
         queryset = queryset.filter(category_id=category_id)

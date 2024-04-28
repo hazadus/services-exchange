@@ -64,7 +64,7 @@
           <a href="{% url 'projects:detail' project.pk %}" class="hover:underline">
             {{ project.title }}
           </a> &middot;
-          <a href="" class="text-gray-500 hover:underline">{{ project.category.title }}</a> &middot;
+          <a href="{% url 'projects:list' %}?category_id={{ project.category.pk }}" class="text-gray-500 hover:underline">{{ project.category.title }}</a> &middot;
           {{ project.price }} ₽
         </div>
       {% endfor %}
