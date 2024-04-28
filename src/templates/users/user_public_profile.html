@@ -54,6 +54,23 @@
     </div>
   {% endif %}
 
+  <h1 class="text-2xl font-semibold mb-4">Проекты пользователя</h1>
+  {% if public_user.projects.count == 0 %}
+    <p class="mb-8">Пока пользователь не разместил никаких проектов.</p>
+  {% else %}
+    <div class="flex flex-col mb-8">
+      {% for project in public_user.projects.all %}
+        <div>
+          <a href="" class="hover:underline">
+            {{ project.title }}
+          </a> &middot;
+          <a href="" class="text-gray-500 hover:underline">{{ project.category.title }}</a> &middot;
+          {{ project.price }} ₽
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
   <h1 class="text-2xl font-semibold mb-4">Отзывы о {{ public_user.username }}</h1>
   <p class="mb-8">Пока нет ни одного отзыва о работе пользователя.</p>
 {% endblock content %}
