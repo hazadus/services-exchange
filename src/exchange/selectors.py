@@ -1,18 +1,12 @@
-from typing import Iterable
-
 from django.db.models import QuerySet
 
 from exchange.models import Category
 
 
 def category_list() -> QuerySet:
-    return (
-        Category.objects.prefetch_related("parent")
-        .prefetch_related("parent__parent")
-        .prefetch_related("subcategories")
-        .prefetch_related("subcategories__subcategories")
-        .all()
-    )
+    return Category.objects.prefetch_related(
+        "parent", "parent__parent", "subcategories", "subcategories__subcategories"
+    ).all()
 
 
 def category_list_only_available() -> QuerySet:

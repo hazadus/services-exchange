@@ -3,16 +3,36 @@
 {% block content %}
   <h1 class="text-2xl font-semibold mb-4">Список всех рубрик на сайте</h1>
 
+  {% if user_mode == 'buyer' %}
+    {% include "alert.html" with message="У вас выбран режим &laquo;Я покупатель&raquo;, поэтому по ссылкам ниже вы увидете список услуг в выбранной категории." style="info" %}
+  {% else %}
+    {% include "alert.html" with message="У вас выбран режим &laquo;Я продавец&raquo;, поэтому по ссылкам ниже вы увидете список проектов в выбранной категории." style="info" %}
+  {% endif %}
+
   {% for top_category in category_list %}
     {% if top_category.parent == None %}
       <section class="mb-8">
         <h2 class="text-xl font-semibold mb-2">{{ top_category }}</h2>
         <div class="grid grid-cols-4 gap-5">
           {% for mid_category in top_category.subcategories.all %}
-            <div class="border border-gray-300 shadow-md rounded-lg p-4">
+            <div class="flex flex-col border border-gray-300 shadow-md rounded-lg p-4">
               <h3 class="font-medium mb-2">{{ mid_category.title }}</h3>
               {% for low_category in mid_category.subcategories.all %}
-                <a class="block hover:underline" href="{% url 'services:list' %}?category_id={{ low_category.pk }}">{{ low_category.title }}</a>
+                {% if user_mode == 'buyer' %}
+                  {# В режиме "покупатель" ссылки будут вести на услуги в данной категории #}
+                  <div>
+                    <a class="hover:underline" href="{% url 'services:list' %}?category_id={{ low_category.pk }}">
+                      {{ low_category.title }}
+                    </a>
+                  </div>
+                {% else %}
+                  {# В режиме "продавец" ссылки будут вести на проекты в данной категории #}
+                  <div>
+                    <a class="hover:underline" href="{% url 'projects:list' %}?category_id={{ low_category.pk }}">
+                      {{ low_category.title }}
+                    </a>
+                  </div>
+                {% endif %}
               {% endfor %}
             </div>
           {% endfor %}
