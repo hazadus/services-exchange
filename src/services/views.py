@@ -1,8 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
-
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 from exchange.selectors import category_get_by_id, category_list_only_available
 
 from services.models import Service
@@ -112,3 +117,14 @@ class ServiceUpdateView(
 
     def get_success_url(self):
         return reverse_lazy("services:update", kwargs={"pk": self.get_object().pk})
+
+
+class ServiceDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Service
+    template_name = "services/service_delete.html"
+    success_url = reverse_lazy("services:my_list")
+
+    def test_func(self):
+        """Only allow owner of the service to delete it."""
+        service = self.get_object()
+        return service.provider == self.request.user
