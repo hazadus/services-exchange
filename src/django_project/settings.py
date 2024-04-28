@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     "core.apps.CoreConfig",
     "exchange.apps.ExchangeConfig",
     "services.apps.ServicesConfig",
+    "projects.apps.ProjectsConfig",
 ]
 
 MIDDLEWARE = [
