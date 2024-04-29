@@ -99,6 +99,8 @@ class Action(models.Model):
 
     VIEW_SERVICE = "просмотрена услуга"
     VIEW_PROJECT = "просмотрен проект"
+    PLACE_ORDER = "размещен заказ"
+    RECEIVE_ORDER = "получен заказ"
 
     user = models.ForeignKey(
         verbose_name="пользователь",
