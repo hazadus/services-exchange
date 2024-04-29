@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "exchange.apps.ExchangeConfig",
     "services.apps.ServicesConfig",
     "projects.apps.ProjectsConfig",
+    "orders.apps.OrdersConfig",
 ]
 
 MIDDLEWARE = [
