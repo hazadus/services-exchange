@@ -5,14 +5,85 @@
 {% endblock %}
 
 {% block content %}
-  <h1 class="text-2xl font-semibold mb-2">{{ service.title }}</h1>
-  <div class="text-gray-500 mb-2">
-    <a href="{% url 'services:list' %}?category_id={{ service.category.pk }}" class="hover:underline">
-      {{ service.category }}
-    </a>
-  </div>
-  <div>Исполнитель: {{ service.provider.username }}</div>
+  <section class="mx-auto max-w-5xl">
+    <div class="flex flex-col grid grid-cols-12 gap-5">
+      <div class="col-span-8 flex flex-col">
+        <!-- Карточка услуги -->
+        <div class="border border-gray-100 p-4">
+          <h1 class="text-3xl font-semibold mb-2">{{ service.title }}</h1>
+          <div class="text-gray-500 mb-4">
+            <a href="{% url 'services:list' %}?category_id={{ service.category.pk }}" class="hover:underline">
+              {{ service.category }}
+            </a>
+          </div>
 
-  <a href="{% url 'services:update' service.pk  %}" class="inline-flex items-center px-5 py-2.5 mt-4 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800">Изменить</a>
-  <a href="{% url 'services:delete' service.pk  %}" class="inline-flex items-center px-5 py-2.5 mt-4 text-sm font-medium text-center text-white bg-red-700 rounded-lg focus:ring-4 focus:ring-red-200 hover:bg-red-800">Удалить</a>
+          <h2 class="text-2xl font-semibold mb-4">Об этой услуге</h2>
+          <p class="mb-4">
+            {{ service.description }}
+          </p>
+
+          <h3 class="text-xl font-medium mb-4">Нужно для заказа:</h3>
+          <p class="mb-4">
+            {{ service.requirements }}
+          </p>
+
+          <div class="pt-2 border-t border-gray-100">
+            <span class="text-gray-500">{{ service.term }} дней на выполнение</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-span-4 flex flex-col">
+        {% if service.provider == user %}
+          <div class="border border-gray-100 p-4 flex flex-col mb-4">
+            <h2 class="text-xl font-medium mb-2">Управлять услугой</h2>
+            <a href="{% url 'services:update' service.pk  %}" class="mb-1 w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Изменить</a>
+            <a href="{% url 'services:delete' service.pk  %}" class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Удалить</a>
+          </div>
+        {% else %}
+          <!-- Блок заказа -->
+          <div class="border border-gray-100 p-4 flex flex-col mb-4">
+            <h1 class="mb-2 text-2xl"><span class="text-green-500 font-semibold">{{ service.price }} ₽</span> Детали заказа</h1>
+            <span class="mb-2">{{ service.term }} дней на выполнение</span>
+            <a href="" class="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Заказать за {{ service.price }} ₽</a>
+          </div>
+        {% endif %}
+
+        <!-- О поставщике услуги -->
+        <div class="border border-gray-100 p-4 flex flex-col">
+          <!-- Аватарка + имя -->
+          <div class="flex mb-2">
+            {% if service.provider.profile_image %}
+              <a href="{% url 'users:public_profile' service.provider.username %}">
+                <img src="{{ service.provider.profile_image.url }}" class="h-16 w-16 rounded-full mx-1" alt="{{ service.provider.username }}">
+              </a>
+            {% endif %}
+            <div class="flex-1 flex flex-col px-2">
+              <a href="{% url 'users:public_profile' service.provider.username %}" class="hover:underline">{{ service.provider.username }}</a>
+              <span>{{ service.provider.full_name }}</span>
+            </div>
+          </div>
+
+          <!-- Кнопка "Связаться с продавцом" -->
+          {% if service.provider != user %}
+            <a href="" class="mb-4 w-full text-gray-900 bg-gray-50 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Связаться с продавцом</a>
+          {% endif %}
+
+          <!-- Статистика пользователя -->
+          <div class="flex py-4 border-t border-gray-100">
+            <div class="flex-1">Выполнено заказов</div>
+            <div>0</div>
+          </div>
+          <div class="flex py-4 border-t border-gray-100">
+            <div class="flex-1">Нет оценок</div>
+            <div>0</div>
+          </div>
+          <div class="flex pt-4 border-t border-gray-100">
+            <div class="flex-1">Способы оплаты</div>
+            <div>С баланса</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 {% endblock content %}

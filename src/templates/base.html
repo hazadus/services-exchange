@@ -47,8 +47,8 @@
           {% else %}
             <!-- Публичные разделы сайта -->
             <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg" href="{% url 'exchange:category_list' %}">Рубрики</a>
-            <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Услуги</a>
-            <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Биржа</a>
+            <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg" href="{% url 'services:list' %}">Услуги</a>
+            <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg" href="{% url 'projects:list' %}">Биржа</a>
           {% endif %}
         </div>
 
