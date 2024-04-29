@@ -9,6 +9,8 @@ from django.views.generic import (
     UpdateView,
 )
 from exchange.selectors import category_get_by_id, category_list_only_available
+from users.models import Action
+from users.services import action_create
 
 from services.models import Service
 from services.selectors import service_get_by_id, service_list
@@ -58,6 +60,24 @@ class ServiceDetailView(DetailView):
             )
 
         return service_get_by_id(service_id=pk)
+
+    def get(self, request, *args, **kwargs):
+        """
+        Для аутентифицированного пользователя создадим действие, чтобы сохранить историю просмотра.
+        Просмотры пользователем своих услуг фиксировать не будем.
+        """
+        service = self.get_object()
+
+        if self.request.user.is_authenticated and (
+            service.provider != self.request.user
+        ):
+            action_create(
+                user=self.request.user,
+                verb=Action.VIEW_SERVICE,
+                target=service,
+            )
+
+        return super().get(request, *args, **kwargs)
 
 
 class ServiceCreateView(LoginRequiredMixin, CreateView):

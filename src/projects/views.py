@@ -9,6 +9,8 @@ from django.views.generic import (
     UpdateView,
 )
 from exchange.selectors import category_get_by_id, category_list_only_available
+from users.models import Action
+from users.services import action_create
 
 from projects.models import Project
 from projects.selectors import project_get_by_id, project_list
@@ -58,6 +60,24 @@ class ProjectDetailView(DetailView):
             )
 
         return project_get_by_id(project_id=pk)
+
+    def get(self, request, *args, **kwargs):
+        """
+        Для аутентифицированного пользователя создадим действие, чтобы сохранить историю просмотра.
+        Просмотры пользователем своих проектов фиксировать не будем.
+        """
+        project = self.get_object()
+
+        if self.request.user.is_authenticated and (
+            project.customer != self.request.user
+        ):
+            action_create(
+                user=self.request.user,
+                verb=Action.VIEW_PROJECT,
+                target=project,
+            )
+
+        return super().get(request, *args, **kwargs)
 
 
 class ProjectCreateView(LoginRequiredMixin, CreateView):

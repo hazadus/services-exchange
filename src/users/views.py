@@ -5,7 +5,11 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, UpdateView
 
 from users.models import CustomUser
-from users.selectors import get_user_by_username
+from users.selectors import (
+    action_get_latest_project_views,
+    action_get_latest_service_views,
+    user_get_by_username,
+)
 
 
 class PublicUserProfileView(TemplateView):
@@ -18,11 +22,22 @@ class PublicUserProfileView(TemplateView):
         if username is None:
             raise Http404
 
-        public_user = get_user_by_username(username)
+        public_user = user_get_by_username(username)
         if public_user is None:
             raise Http404
 
         context["public_user"] = public_user
+
+        if self.request.user == public_user:
+            # Если пользователь смотрит свой публичный профиль, добаим инфо
+            # о последних просмотренных услугах и проектах
+            context["actions_services_viewed"] = action_get_latest_service_views(
+                user=public_user
+            )
+            context["actions_projects_viewed"] = action_get_latest_project_views(
+                user=public_user
+            )
+
         return context
 
 

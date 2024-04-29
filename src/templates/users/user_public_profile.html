@@ -73,4 +73,30 @@
 
   <h1 class="text-2xl font-semibold mb-4">Отзывы о {{ public_user.username }}</h1>
   <p class="mb-8">Пока нет ни одного отзыва о работе пользователя.</p>
+
+  {% if actions_services_viewed %}
+    <h1 class="text-2xl font-semibold mb-4">Недавно просмотренные услуги</h1>
+    <div class="mb-8 flex flex-col">
+      {% for action in actions_services_viewed %}
+        <div>
+          <a href="{% url 'services:detail' action.target.pk %}" class="hover:underline">
+            {{ action.target }}
+          </a> &middot; <span class="text-gray-500">просмотрено {{ action.created }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if actions_projects_viewed %}
+    <h1 class="text-2xl font-semibold mb-4">Недавно просмотренные проекты</h1>
+    <div class="mb-8 flex flex-col">
+      {% for action in actions_projects_viewed %}
+        <div>
+          <a href="{% url 'projects:detail' action.target.pk %}" class="hover:underline">
+            {{ action.target }}
+          </a> &middot; <span class="text-gray-500">просмотрено {{ action.created }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
 {% endblock content %}

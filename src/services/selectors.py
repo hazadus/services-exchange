@@ -7,8 +7,7 @@ def service_list(
     category_id: int | None = None, provider_id: int | None = None
 ) -> QuerySet:
     queryset = Service.objects.select_related(
-        "category", "category__parent", "category__parent__parent",
-        "provider"
+        "category", "category__parent", "category__parent__parent", "provider"
     )
 
     if category_id:
