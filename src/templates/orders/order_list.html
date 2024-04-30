@@ -12,7 +12,9 @@
     <div class="mb-8">
       {% for order in order_list %}
         {% if user == order.customer %}
-          {{ order }}
+          <a href="{% url 'orders:detail' order.pk %}" class="hover:underline">
+            {{ order }} &middot; {{ order.item.title }}
+          </a> <span class="text-gray-500">&middot; {{ order.get_status_display }}</span>
         {% endif %}
       {% endfor %}
     </div>
@@ -20,7 +22,9 @@
     <h2 class="text-2xl font-semibold mb-2 mt-2">Я – исполнитель</h2>
     {% for order in order_list %}
       {% if user == order.provider %}
-        {{ order }}
+          <a href="{% url 'orders:detail' order.pk %}" class="hover:underline">
+            {{ order }} &middot; {{ order.item.title }}
+          </a> <span class="text-gray-500">&middot; {{ order.get_status_display }}</span>
       {% endif %}
     {% endfor %}
   </section>
