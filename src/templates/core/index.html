@@ -6,5 +6,11 @@
 
 {% block content %}
   <h1 class="text-xl font-semibold mb-2">Добро пожаловать на Биржу Услуг!</h1>
-  <p>Это главная страница с информацией о сайте.</p>
+  <p class="mb-2">Это главная страница с информацией о сайте.</p>
+
+  {% if messages %}
+    {% for message in messages %}
+      {% include "alert.html" with message=message style="info" %}
+    {% endfor %}
+  {% endif %}
 {% endblock content %}

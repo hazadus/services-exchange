@@ -11,6 +11,17 @@
         <!-- Карточка заказа -->
         <div class="border border-gray-100 p-4 mb-4">
           <h1 class="text-3xl font-semibold mb-4">Заказ №{{ order.pk }}</h1>
+
+          {% if messages %}
+            {% for message in messages %}
+              {% if message.extra_tags == 'warning' %}
+                {% include "alert.html" with message=message style="warning" %}
+              {% else %}
+                {% include "alert.html" with message=message style="success" %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+
           <h2 class="text-xl font-medium mb-2">{{ order.item.title }}</h2>
 
           <div class="mb-1">

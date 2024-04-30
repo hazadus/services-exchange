@@ -184,7 +184,7 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_SIGNUP_REDIRECT_URL = reverse_lazy("core:index")
-ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy("account_login")
+ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy("core:index")
 
 # Logging
 

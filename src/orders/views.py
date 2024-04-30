@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.core.exceptions import BadRequest, PermissionDenied
@@ -35,6 +36,7 @@ def order_service_create_view(request: HttpRequest) -> HttpResponse:
             item=service,
             price=service.price,
         )
+        messages.success(request, "Заказ был успешно создан.")
         return redirect(reverse_lazy("orders:detail", kwargs={"pk": order.pk}))
 
     return redirect(reverse_lazy("services:list"))
@@ -48,9 +50,10 @@ def order_set_status_view(request: HttpRequest, order_id: int) -> HttpResponse:
     if order is None:
         raise Http404
 
-    # Статус заказа могут менять только заказчик или исполнитель заказа
     if (request.user != order.customer) and (request.user != order.provider):
-        raise PermissionDenied
+        raise PermissionDenied(
+            "Статус заказа могут менять только заказчик или исполнитель заказа"
+        )
 
     form = OrderChangeStatusForm(request.POST)
     if form.is_valid():
@@ -60,10 +63,15 @@ def order_set_status_view(request: HttpRequest, order_id: int) -> HttpResponse:
         order_set_status(order=order, new_status=new_status, actor=request.user)
 
         if order.status == new_status:
-            # Если новый статус установился, всё хорошо
-            return redirect(reverse_lazy("orders:detail", kwargs={"pk": order.pk}))
+            messages.success(request, "Статус заказа успешно изменён.")
+        else:
+            messages.warning(
+                request,
+                "Не удалось изменить статус заказа. Попробуйте ещё раз!",
+                extra_tags="warning",
+            )
 
-    raise BadRequest
+    return redirect(reverse_lazy("orders:detail", kwargs={"pk": order.pk}))
 
 
 class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
