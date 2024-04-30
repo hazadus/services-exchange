@@ -41,25 +41,40 @@ def order_set_status(order: Order, new_status: str, actor: CustomUser) -> None:
             if (order.status == "created") and (actor == order.customer):
                 order.status = "cancelled_by_customer"
                 order.is_cancelled = True
-                order.save()
                 action_create(user=actor, verb=Action.CANCEL_ORDER, target=order)
         case "rejected_by_provider":
             # Исполнитель может отклонить заказ, пока он только создан заказчиком:
             if (order.status == "created") and (actor == order.provider):
                 order.status = "rejected_by_provider"
                 order.is_cancelled = True
-                order.save()
                 action_create(user=actor, verb=Action.REJECT_ORDER, target=order)
         case "in_progress":
             if (order.status == "created") and (actor == order.provider):
                 order.status = "in_progress"
-                order.save()
                 action_create(user=actor, verb=Action.ACCEPT_ORDER, target=order)
         case "submitted_by_provider":
-            # Исполнитель может "сдать" заказ находящийся в работе
-            if (order.status == "in_progress") and (actor == order.provider):
+            # Исполнитель может "сдать" заказ находящийся в работе или возвращенный на доработку
+            if (order.status in ["in_progress", "returned_by_customer"]) and (
+                actor == order.provider
+            ):
                 order.status = "submitted_by_provider"
-                order.save()
                 action_create(user=actor, verb=Action.SUBMIT_ORDER, target=order)
+        case "returned_by_customer":
+            # Заказчик может вернуть на доработку "сданный" исполнителем заказ
+            if (order.status == "submitted_by_provider") and (actor == order.customer):
+                order.status = "returned_by_customer"
+                action_create(user=actor, verb=Action.RETURN_ORDER, target=order)
+        case "accepted_by_customer":
+            # Заказчик может принять "сданный" исполнителем заказ
+            if (order.status == "submitted_by_provider") and (actor == order.customer):
+                order.status = "accepted_by_customer"
+                order.is_completed = True
+                action_create(
+                    user=order.customer, verb=Action.RECEIVE_RESULT, target=order
+                )
+                action_create(
+                    user=order.provider, verb=Action.COMPLETE_ORDER, target=order
+                )
         case _:
             return None
+    order.save()

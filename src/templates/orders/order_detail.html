@@ -50,6 +50,10 @@
               {% endif %}
             </h2>
 
+            {% if order.is_completed %}
+              <p>Ура! 🎉 Заказ был успешно выполнен.</p>
+            {% endif %}
+
             {% if user == order.customer %}
               <!-- Кнопки действий для заказчика -->
               {% if order.status == 'created' %}
@@ -62,7 +66,20 @@
               {% elif order.status == 'in_progress' %}
                 <p>Ваш заказ находится в работе. Исполнитель направит его вам на проверку по мере готовности.</p>
               {% elif order.status == 'submitted_by_provider' %}
-                <p class="mb-1 text-sm">Исполнитель направил вам выполненный заказ на проверку. Принимайте работу только в том случае, если выполнены все задачи, или отклоните заказ на доработку.</p>
+                {# Рассмотрев результаты работы исполнителя, заказчик может принять работу или вернуть на доработку #}
+                <p class="mb-2 text-sm">Исполнитель направил вам выполненный заказ на проверку. Принимайте работу только в том случае, если выполнены все задачи, или верните заказ на доработку.</p>
+                <form action="{% url 'orders:set_status' order.pk %}" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" name="new_status" value="accepted_by_customer">
+                  <button class="mb-1 w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Принять работу</button>
+                </form>
+                <form action="{% url 'orders:set_status' order.pk %}" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" name="new_status" value="returned_by_customer">
+                  <button class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Вернуть на доработку</button>
+                </form>
+              {% elif order.status == 'returned_by_customer' %}
+                <p class="text-sm">Вы вернули заказ на доработку исполнителю. Дожидайтесь завершения работы.</p>
               {% endif %}
             {% else %}
               <!-- Кнопки действий для исполнителя -->
@@ -78,14 +95,16 @@
                   <input type="hidden" name="new_status" value="rejected_by_provider">
                   <button class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Отклонить заказ</button>
                 </form>
-              {% elif order.status == 'in_progress' %}
-                {# Заказ в работе исполнитель может "сдать" по готовности: #}
-                <p class="mb-1 text-sm">Сдавайте заказ, только если выполнены все поставленные задачи.</p>
+              {% elif order.status == 'in_progress' or order.status == 'returned_by_customer' %}
+                {# Заказ в работе/возвращенный на доработку исполнитель может "сдать" по готовности: #}
+                <p class="mb-2 text-sm">Сдавайте заказ, только если выполнены все поставленные задачи.</p>
                 <form action="{% url 'orders:set_status' order.pk %}" method="POST">
                   {% csrf_token %}
                   <input type="hidden" name="new_status" value="submitted_by_provider">
                   <button class="mb-1 w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Сдать заказ</button>
                 </form>
+              {% elif order.status == 'submitted_by_provider' %}
+                <p class="text-sm">Вы направили работу на проверку заказчику. Ожидайте подтверждения, или возврата на доработку.</p>
               {% endif %}
             {% endif %}
           </div>
