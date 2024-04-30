@@ -1,6 +1,7 @@
 from django.db.models import QuerySet
+from users.models import CustomUser
 
-from projects.models import Project
+from projects.models import Offer, Project
 
 
 def project_list(
@@ -22,7 +23,16 @@ def project_list(
 def project_get_by_id(project_id: int) -> Project | None:
     return (
         Project.objects.filter(id=project_id)
-        .select_related("category__parent__parent")
-        .select_related("customer")
+        .select_related("category__parent__parent", "customer")
+        .prefetch_related("offers", "offers__candidate")
         .first()
     )
+
+
+def offer_list(project_id: int, candidate: CustomUser | None = None) -> QuerySet:
+    queryset = Offer.objects.filter(project_id=project_id, is_cancelled=False)
+
+    if candidate:
+        queryset = queryset.filter(candidate=candidate)
+
+    return queryset

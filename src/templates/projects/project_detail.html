@@ -53,7 +53,7 @@
       <!-- Кол-во откликов / кнопки -->
       <div class="flex items-center">
         <div class="flex-1 text-sm text-gray-500 font-thin">
-          Предложений: {{ project.offers.count }}
+          Предложений: {{ project.offers.count }}{# Тут будут все предложения, включая уже отклоненные. #}
         </div>
         <div>
           {% if user == project.customer %}
@@ -62,14 +62,32 @@
             <a href="{% url 'projects:delete' project.pk %}" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-red-700 rounded-lg focus:ring-4 focus:ring-red-200 hover:bg-red-800">Удалить</a>
           {% else %}
             <!-- Кнопка подачи заявки -->
-            <form action="{% url 'projects:offer_create' %}" method="POST">
-              {% csrf_token %}
-              <input type="hidden" name="project_id" value="{{ project.pk }}">
-              <button class="mb-1 w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Предложить услугу</button>
-            </form>
+            {% if not offers.count %}
+              <form action="{% url 'projects:offer_create' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="project_id" value="{{ project.pk }}">
+                <button class="mb-1 w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Предложить услугу</button>
+              </form>
+            {% endif %}
           {% endif %}
         </div>
       </div>
+    </div>
+
+    <div class="border border-gray-100 p-4 mb-4">
+      {% if user == project.customer %}
+        {# Для заказчика проекта показываем все предложения #}
+        <h1 class="text-xl font-semibold mb-2">Предложения исполнителей</h1>
+
+        {% for offer in offers %}
+          <div>{{ offer.candidate.username }} &middot; {{ offer.created }}</div>
+        {% endfor %}
+      {% else %}
+        {# Для остальных пользователей показываем только их предложение #}
+        {% if offers.count %}
+          Вы разместили предложениe {{ offers.0.created }}. Статус: {{ offers.0.get_status_display }}.
+        {% endif %}
+      {% endif %}
     </div>
   </section>
 {% endblock content %}

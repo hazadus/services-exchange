@@ -19,7 +19,7 @@ from users.services import action_create
 
 from projects.forms import CreateOfferForm
 from projects.models import Project
-from projects.selectors import project_get_by_id, project_list
+from projects.selectors import offer_list, project_get_by_id, project_list
 from projects.services import offer_create
 
 
@@ -85,6 +85,19 @@ class ProjectDetailView(DetailView):
             )
 
         return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        project = self.get_object()
+
+        candidate = None
+        if self.request.user != project.customer:
+            candidate = self.request.user
+
+        context["offers"] = offer_list(project_id=project.pk, candidate=candidate)
+
+        return context
 
 
 class ProjectCreateView(LoginRequiredMixin, CreateView):
