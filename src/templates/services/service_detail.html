@@ -43,7 +43,7 @@
         {% else %}
           <!-- Блок заказа -->
           <div class="border border-gray-100 p-4 flex flex-col mb-4">
-            <h1 class="mb-2 text-2xl"><span class="text-green-500 font-semibold">{{ service.price }} ₽</span> Детали заказа</h1>
+            <h1 class="mb-2 text-2xl"><span class="text-green-600 font-semibold">{{ service.price }} ₽</span> Детали заказа</h1>
             <span class="mb-2">{{ service.term }} дней на выполнение</span>
             <form action="{% url 'orders:create_service' %}" method="POST">
               {% csrf_token %}
