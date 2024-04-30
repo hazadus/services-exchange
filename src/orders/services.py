@@ -38,10 +38,22 @@ def order_set_status(order: Order, new_status: str, actor: CustomUser) -> None:
     match new_status:
         case "cancelled_by_customer":
             # Заказчик может отменить заказ, только если он ещё не был принят в работу исполнителем
-            if order.status == "created":
+            if (order.status == "created") and (actor == order.customer):
                 order.status = "cancelled_by_customer"
                 order.is_cancelled = True
                 order.save()
                 action_create(user=actor, verb=Action.CANCEL_ORDER, target=order)
+        case "rejected_by_provider":
+            # Исполнитель может отклонить заказ, пока он только создан заказчиком:
+            if (order.status == "created") and (actor == order.provider):
+                order.status = "rejected_by_provider"
+                order.is_cancelled = True
+                order.save()
+                action_create(user=actor, verb=Action.REJECT_ORDER, target=order)
+        case "in_progress":
+            if (order.status == "created") and (actor == order.provider):
+                order.status = "in_progress"
+                order.save()
+                action_create(user=actor, verb=Action.ACCEPT_ORDER, target=order)
         case _:
             return None

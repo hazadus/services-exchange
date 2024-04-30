@@ -59,12 +59,23 @@
                   <input type="hidden" name="new_status" value="cancelled_by_customer">
                   <button class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Отменить заказ</button>
                 </form>
+              {% elif order.status == 'in_progress' %}
+                <p>Ваш заказ находится в работе. Исполнитель направит его вам на проверку по мере готовности.</p>
               {% endif %}
             {% else %}
               <!-- Кнопки действий для исполнителя -->
               {% if order.status == 'created' %}
-                <a class="mb-1 w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Принять заказ</a>
-                <a class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Отклонить заказ</a>
+                {# Пока заказ только создан, исполнитель может принять или отклонить его. #}
+                <form action="{% url 'orders:set_status' order.pk %}" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" name="new_status" value="in_progress">
+                  <button class="mb-1 w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Принять заказ</button>
+                </form>
+                <form action="{% url 'orders:set_status' order.pk %}" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" name="new_status" value="rejected_by_provider">
+                  <button class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Отклонить заказ</button>
+                </form>
               {% endif %}
             {% endif %}
           </div>

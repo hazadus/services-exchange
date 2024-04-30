@@ -102,6 +102,8 @@ class Action(models.Model):
     PLACE_ORDER = "размещен заказ"
     RECEIVE_ORDER = "получен заказ"
     CANCEL_ORDER = "отменен заказ"
+    REJECT_ORDER = "отклонен заказ"
+    ACCEPT_ORDER = "принят в работу заказ"
 
     user = models.ForeignKey(
         verbose_name="пользователь",

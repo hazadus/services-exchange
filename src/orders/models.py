@@ -9,9 +9,9 @@ class Order(models.Model):
 
     STATUS_CHOICES = (
         ("created", "Размещен заказчиком"),
-        ("in_progress", "В работу у исполнителя"),
+        ("in_progress", "В работе у исполнителя"),
         ("cancelled_by_customer", "Отменен заказчиком"),
-        ("cancelled_by_provider", "Отменен исполнителем"),
+        ("rejected_by_provider", "Отклонен исполнителем"),
         ("submitted_by_provider", "Сдан исполнителем"),
         ("returned_by_customer", "Возвращен заказчиком на доработку"),
         ("accepted_by_customer", "Принят заказчиком"),
