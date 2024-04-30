@@ -116,6 +116,11 @@ class Offer(models.Model):
         default="created",
         max_length=32,
     )
+    is_cancelled = models.BooleanField(
+        verbose_name="отменено",
+        help_text="Предложение отменено или отклонено.",
+        default=False,
+    )
     created = models.DateTimeField(
         verbose_name="создан",
         auto_now_add=True,
