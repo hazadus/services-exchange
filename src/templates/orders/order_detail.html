@@ -61,6 +61,8 @@
                 </form>
               {% elif order.status == 'in_progress' %}
                 <p>Ваш заказ находится в работе. Исполнитель направит его вам на проверку по мере готовности.</p>
+              {% elif order.status == 'submitted_by_provider' %}
+                <p class="mb-1 text-sm">Исполнитель направил вам выполненный заказ на проверку. Принимайте работу только в том случае, если выполнены все задачи, или отклоните заказ на доработку.</p>
               {% endif %}
             {% else %}
               <!-- Кнопки действий для исполнителя -->
@@ -75,6 +77,14 @@
                   {% csrf_token %}
                   <input type="hidden" name="new_status" value="rejected_by_provider">
                   <button class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Отклонить заказ</button>
+                </form>
+              {% elif order.status == 'in_progress' %}
+                {# Заказ в работе исполнитель может "сдать" по готовности: #}
+                <p class="mb-1 text-sm">Сдавайте заказ, только если выполнены все поставленные задачи.</p>
+                <form action="{% url 'orders:set_status' order.pk %}" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" name="new_status" value="submitted_by_provider">
+                  <button class="mb-1 w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Сдать заказ</button>
                 </form>
               {% endif %}
             {% endif %}

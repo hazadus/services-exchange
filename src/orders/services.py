@@ -55,5 +55,11 @@ def order_set_status(order: Order, new_status: str, actor: CustomUser) -> None:
                 order.status = "in_progress"
                 order.save()
                 action_create(user=actor, verb=Action.ACCEPT_ORDER, target=order)
+        case "submitted_by_provider":
+            # Исполнитель может "сдать" заказ находящийся в работе
+            if (order.status == "in_progress") and (actor == order.provider):
+                order.status = "submitted_by_provider"
+                order.save()
+                action_create(user=actor, verb=Action.SUBMIT_ORDER, target=order)
         case _:
             return None
