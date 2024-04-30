@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Мои заказы
+{% endblock %}
+
+{% block content %}
+  <section class="mx-auto max-w-5xl">
+    <h1 class="text-3xl font-semibold mb-4">Мои заказы</h1>
+
+    <h2 class="text-2xl font-semibold mb-2">Я – заказчик</h2>
+    <div class="mb-8">
+      {% for order in order_list %}
+        {% if user == order.customer %}
+          {{ order }}
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <h2 class="text-2xl font-semibold mb-2 mt-2">Я – исполнитель</h2>
+    {% for order in order_list %}
+      {% if user == order.provider %}
+        {{ order }}
+      {% endif %}
+    {% endfor %}
+  </section>
+{% endblock content %}

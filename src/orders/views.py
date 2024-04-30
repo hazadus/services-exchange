@@ -4,12 +4,13 @@ from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from services.selectors import service_get_by_id
 from users.selectors import action_list_for_order
 
 from orders.forms import CreateServiceOrderForm
 from orders.models import Order
+from orders.selectors import order_list
 from orders.services import order_create
 
 
@@ -57,3 +58,11 @@ class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         context["actions"] = actions
 
         return context
+
+
+class OrderListView(LoginRequiredMixin, ListView):
+    model = Order
+    template_name = "orders/order_list.html"
+
+    def get_queryset(self):
+        return order_list(user_id=self.request.user.pk)
