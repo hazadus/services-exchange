@@ -8,10 +8,16 @@
   <section class="mx-auto max-w-5xl">
     <h1 class="text-3xl font-semibold mb-4">Мои заказы</h1>
 
-    <h2 class="text-2xl font-semibold mb-2">Я – заказчик</h2>
-    <div class="mb-8">
+  {% if user_mode == 'buyer' %}
+    {% include "alert.html" with message="У вас выбран режим &laquo;Я покупатель&raquo;, поэтому вы видите только заказанные вами услуги." style="info" %}
+  {% else %}
+    {% include "alert.html" with message="У вас выбран режим &laquo;Я продавец&raquo;, поэтому вы видите только заказанные у вас услуги." style="info" %}
+  {% endif %}
+
+    <h2 class="text-2xl font-semibold mb-2">В работе</h2>
+    <div class="mb-4 pb-4 border-b border-gray-100">
       {% for order in order_list %}
-        {% if user == order.customer %}
+        {% if order.status == 'created' %}
           <div>
             <a href="{% url 'orders:detail' order.pk %}" class="hover:underline">
               {{ order }} &middot; {{ order.item.title }}
@@ -21,15 +27,34 @@
       {% endfor %}
     </div>
 
-    <h2 class="text-2xl font-semibold mb-2 mt-2">Я – исполнитель</h2>
-    {% for order in order_list %}
-      {% if user == order.provider %}
+    <h2 class="text-2xl font-semibold mb-2">Завершены</h2>
+    <div class="mb-4 pb-4 border-b border-gray-100">
+      {% for order in order_list %}
+        {% if order.is_completed %}
           <div>
             <a href="{% url 'orders:detail' order.pk %}" class="hover:underline">
               {{ order }} &middot; {{ order.item.title }}
             </a> <span class="text-gray-500">&middot; {{ order.get_status_display }}</span>
           </div>
-      {% endif %}
-    {% endfor %}
+        {% endif %}
+      {% endfor %}
+    </div>
+
+
+    <h2 class="text-2xl font-semibold mb-2">Отменены</h2>
+    <div class="mb-8">
+      {% for order in order_list %}
+        {% if order.is_cancelled %}
+          <div>
+            <a href="{% url 'orders:detail' order.pk %}" class="hover:underline">
+              {{ order }} &middot; {{ order.item.title }}
+            </a> <span class="text-gray-500">&middot; {{ order.get_status_display }}</span>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+
+
   </section>
 {% endblock content %}

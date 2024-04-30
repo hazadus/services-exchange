@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.core.exceptions import BadRequest, PermissionDenied
+from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -12,7 +12,12 @@ from users.selectors import action_list_for_order
 
 from orders.forms import CreateServiceOrderForm, OrderChangeStatusForm
 from orders.models import Order
-from orders.selectors import order_get_by_id, order_list
+from orders.selectors import (
+    order_get_by_id,
+    order_list,
+    order_list_as_customer,
+    order_list_as_provider,
+)
 from orders.services import order_create, order_set_status
 
 
@@ -100,4 +105,10 @@ class OrderListView(LoginRequiredMixin, ListView):
     template_name = "orders/order_list.html"
 
     def get_queryset(self):
-        return order_list(user_id=self.request.user.pk)
+        """Фильтруем заказы в зависимиости от режима пользователя – покупатель или продавец."""
+        user_mode = self.request.session.get("user_mode")
+        if user_mode == "buyer":
+            queryset = order_list_as_customer(user_id=self.request.user.pk)
+        else:
+            queryset = order_list_as_provider(user_id=self.request.user.pk)
+        return queryset
