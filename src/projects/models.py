@@ -74,3 +74,58 @@ class Project(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Offer(models.Model):
+    """Предложение кандидатом своей услуги по выполнению проекта заказчика."""
+
+    STATUS_CHOICES = (
+        ("created", "Создано кандидатом"),
+        ("declined", "Отклонено заказчиком"),
+        ("cancelled", "Отменено кандидатом"),
+        ("accepted", "Принято заказчиком"),
+    )
+
+    project = models.ForeignKey(
+        verbose_name="проект",
+        to=Project,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        related_name="offers",
+    )
+    candidate = models.ForeignKey(
+        verbose_name="кандидат на выполнение проекта",
+        help_text="Пользователь, который предлагает свои услуги для реализации проекта.",
+        to=CustomUser,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+        related_name="offers",
+    )
+    comment = models.TextField(
+        verbose_name="комментарий",
+        help_text="Комментарий кандидата для заказчика касательно проекта.",
+        max_length=500,
+        null=True,
+        blank=True,
+    )
+    status = models.CharField(
+        verbose_name="статус предложения",
+        choices=STATUS_CHOICES,
+        default="created",
+        max_length=32,
+    )
+    created = models.DateTimeField(
+        verbose_name="создан",
+        auto_now_add=True,
+    )
+    updated = models.DateTimeField(
+        verbose_name="изменен",
+        auto_now=True,
+    )
+
+    class Meta:
+        ordering = ["-created"]
+        verbose_name = "предложение"
+        verbose_name_plural = "предложения"

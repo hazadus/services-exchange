@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from projects.models import Project
+from projects.models import Offer, Project
 
 
 @admin.register(Project)
@@ -55,4 +55,15 @@ class ProjectAdmin(admin.ModelAdmin):
                 ]
             },
         ),
+    ]
+
+
+@admin.register(Offer)
+class OfferAdmin(admin.ModelAdmin):
+
+    model = Offer
+    list_display = ["id", "project", "candidate", "status"]
+    readonly_fields = [
+        "created",
+        "updated",
     ]
