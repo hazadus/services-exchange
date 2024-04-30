@@ -1,4 +1,4 @@
-from django.db.models import QuerySet
+from django.db.models import Count, Q, QuerySet
 from users.models import CustomUser
 
 from projects.models import Offer, Project
@@ -9,7 +9,7 @@ def project_list(
 ) -> QuerySet:
     queryset = Project.objects.select_related(
         "category", "category__parent", "category__parent__parent", "customer"
-    )
+    ).annotate(offer_count=Count("offers", filter=Q(offers__is_cancelled=False)))
 
     if category_id:
         queryset = queryset.filter(category_id=category_id)
@@ -35,4 +35,4 @@ def offer_list(project_id: int, candidate: CustomUser | None = None) -> QuerySet
     if candidate:
         queryset = queryset.filter(candidate=candidate)
 
-    return queryset
+    return queryset.all()
