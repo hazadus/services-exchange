@@ -101,6 +101,7 @@ class Action(models.Model):
     VIEW_PROJECT = "просмотрен проект"
     PLACE_ORDER = "размещен заказ"
     RECEIVE_ORDER = "получен заказ"
+    CANCEL_ORDER = "отменен заказ"
 
     user = models.ForeignKey(
         verbose_name="пользователь",

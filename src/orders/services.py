@@ -30,3 +30,18 @@ def order_create(
     action_create(provider, verb=Action.RECEIVE_ORDER, target=order)
 
     return order
+
+
+def order_set_status(order: Order, new_status: str, actor: CustomUser) -> None:
+    """Изменяет статус заказа на указанный (если это возможно) и создаёт соответствующее действие
+    пользователя с этим заказом."""
+    match new_status:
+        case "cancelled_by_customer":
+            # Заказчик может отменить заказ, только если он ещё не был принят в работу исполнителем
+            if order.status == "created":
+                order.status = "cancelled_by_customer"
+                order.is_cancelled = True
+                order.save()
+                action_create(user=actor, verb=Action.CANCEL_ORDER, target=order)
+        case _:
+            return None

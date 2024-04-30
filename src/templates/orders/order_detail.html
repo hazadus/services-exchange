@@ -53,8 +53,12 @@
             {% if user == order.customer %}
               <!-- Кнопки действий для заказчика -->
               {% if order.status == 'created' %}
-                {# Пока заказ не принять исполнителем, заказчик может отменить его. #}
-                <a class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Отменить заказ</a>
+                {# Пока заказ не принят исполнителем, заказчик может отменить его. #}
+                <form action="{% url 'orders:set_status' order.pk %}" method="POST">
+                  {% csrf_token %}
+                  <input type="hidden" name="new_status" value="cancelled_by_customer">
+                  <button class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Отменить заказ</button>
+                </form>
               {% endif %}
             {% else %}
               <!-- Кнопки действий для исполнителя -->
