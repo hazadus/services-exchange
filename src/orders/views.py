@@ -1,11 +1,15 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
+from django.views.generic import DetailView
 from services.selectors import service_get_by_id
+from users.selectors import action_list_for_order
 
 from orders.forms import CreateServiceOrderForm
+from orders.models import Order
 from orders.services import order_create
 
 
@@ -23,11 +27,33 @@ def order_service_create_view(request: HttpRequest) -> HttpResponse:
         if not service:
             raise Http404
 
-        order_create(
+        order = order_create(
             customer=request.user,
             provider=service.provider,
             item=service,
             price=service.price,
         )
+        return redirect(reverse_lazy("orders:detail", kwargs={"pk": order.pk}))
 
-    return redirect(reverse_lazy("core:index"))
+    return redirect(reverse_lazy("services:list"))
+
+
+class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+    model = Order
+    template_name = "orders/order_detail.html"
+
+    def test_func(self):
+        """Только заказчик или исполнитель могут просматривать заказ"""
+        order = self.get_object()
+        return (order.customer == self.request.user) or (
+            order.provider == self.request.user
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        order = self.get_object()
+        actions = action_list_for_order(order_id=order.pk)
+        context["actions"] = actions
+
+        return context

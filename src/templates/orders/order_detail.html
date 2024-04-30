@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Заказ №{{ order.pk }}
+{% endblock %}
+
+{% block content %}
+  <section class="mx-auto max-w-5xl">
+    <div class="flex flex-col grid grid-cols-12 gap-5">
+      <div class="col-span-8 flex flex-col">
+        <!-- Карточка заказа -->
+        <div class="border border-gray-100 p-4 mb-4">
+          <h1 class="text-3xl font-semibold mb-4">Заказ №{{ order.pk }}</h1>
+          <h2 class="text-xl font-medium mb-2">{{ order.item.title }}</h2>
+
+          <div class="mb-1">
+            {% if user == order.customer %}
+              Исполнитель:
+              <a href="{% url 'users:public_profile' order.provider.username %}" class="hover:underline">{{ order.provider.username }}</a>
+            {% else %}
+              Заказчик: {{ order.item.customer.username }}
+              <a href="{% url 'users:public_profile' order.customer.username %}" class="hover:underline">{{ order.customer.username }}</a>
+            {% endif %}
+          </div>
+          <div class="mb-1">
+            Cоздан: {{ order.created }}
+          </div>
+          <div class="mb-1">
+            Статус: {{ order.get_status_display }}
+          </div>
+        </div>
+
+        <!-- История событий по заказу -->
+        <div class="border border-gray-100 p-4 mb-4">
+          <h2 class="text-xl font-medium mb-2">История событий по заказу</h2>
+
+          {% for action in actions %}
+            <div>{{ action.user }} {{ action.verb }} <span class="text-gray-500 text-sm">&middot; {{ action.created }}</span></div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="col-span-4 flex flex-col">
+          <div class="border border-gray-100 p-4 flex flex-col mb-4">
+            <h2 class="text-xl font-medium mb-2">
+              {% if user == order.customer %}
+                Вы – заказчик
+              {% else %}
+                Вы – исполнитель
+              {% endif %}
+            </h2>
+
+            {% if user == order.customer %}
+              <!-- Кнопки действий для заказчика -->
+              {% if order.status == 'created' %}
+                {# Пока заказ не принять исполнителем, заказчик может отменить его. #}
+                <a class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Отменить заказ</a>
+              {% endif %}
+            {% else %}
+              <!-- Кнопки действий для исполнителя -->
+              {% if order.status == 'created' %}
+                <a class="mb-1 w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Принять заказ</a>
+                <a class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Отклонить заказ</a>
+              {% endif %}
+            {% endif %}
+          </div>
+      </div>
+    </div>
+  </section>
+{% endblock content %}
