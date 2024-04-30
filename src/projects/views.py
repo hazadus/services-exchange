@@ -1,6 +1,11 @@
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import Http404, HttpRequest, HttpResponse
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.views.decorators.http import require_POST
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -12,8 +17,10 @@ from exchange.selectors import category_get_by_id, category_list_only_available
 from users.models import Action
 from users.services import action_create
 
+from projects.forms import CreateOfferForm
 from projects.models import Project
 from projects.selectors import project_get_by_id, project_list
+from projects.services import offer_create
 
 
 class ProjectListView(ListView):
@@ -143,3 +150,29 @@ class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         """Only allow owner of the project to delete it."""
         project = self.get_object()
         return project.customer == self.request.user
+
+
+@require_POST
+@login_required
+def offer_create_view(request: HttpRequest) -> HttpResponse:
+    form = CreateOfferForm(request.POST)
+
+    if form.is_valid():
+        data = form.cleaned_data
+        project_id = data["project_id"]
+        project = project_get_by_id(project_id=project_id)
+
+        if not project:
+            raise Http404
+
+        if offer_create(project=project, candidate=request.user):
+            messages.success(request, "Вы успешно подали заявку на выполнение проекта!")
+        else:
+            messages.warning(
+                request,
+                "Не удалось разместить вашу заявку на выполнение проекта.",
+                extra_tags="warning",
+            )
+        return redirect(reverse_lazy("projects:detail", kwargs={"pk": project.pk}))
+
+    return redirect(reverse_lazy("projects:list"))

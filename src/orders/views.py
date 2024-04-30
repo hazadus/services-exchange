@@ -14,7 +14,6 @@ from orders.forms import CreateServiceOrderForm, OrderChangeStatusForm
 from orders.models import Order
 from orders.selectors import (
     order_get_by_id,
-    order_list,
     order_list_as_customer,
     order_list_as_provider,
 )
