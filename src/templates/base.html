@@ -55,16 +55,21 @@
         <!-- User menu -->
         <div class="px-4 flex items-center">
           {% if user.is_authenticated %}
-            {% if user.profile_image %}
-              <a href="{% url 'users:public_profile' user.username %}">
+            <a href="{% url 'users:public_profile' user.username %}">
+              {% if user.profile_image %}
                 <img src="{{ user.profile_image.url }}" class="h-8 w-8 rounded-lg mx-1" alt="{{ user.username }}">
-              </a>
-            {% endif %}
+              {% else %}
+                <div class="h-8 w-8 rounded-lg mx-1 bg-gray-200 inline-flex items-center justify-center">{{ user.username|slice:"0:2" }}</div>
+              {% endif %}
+            </a>
             <span class="p-2 font-medium">
               <a href="{% url 'users:public_profile' user.username %}" class="hover:underline">{{ user.username }}</a>
             </span>
             <a href="{% url 'users:update' user.pk %}" class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">
               {% include "icons/icon_gear.html" with size="24" color="#6b7280" %}
+            </a>
+            <a href="{% url 'users:update_balance' %}" class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">
+              {% include "icons/icon_wallet.html" with size="24" color="#6b7280" %}
             </a>
             <a href="{% url 'account_logout' %}" class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">
               {% include "icons/icon_logout.html" with size="24" color="#6b7280" %}

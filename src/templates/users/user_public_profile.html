@@ -8,8 +8,13 @@
     <div class="col-span-3 flex flex-col pr-2">
       {% if public_user.profile_image %}
         <img src="{{ public_user.profile_image.url }}" class="w-64 h-64 rounded-full mx-auto mb-4" alt="{{ public_user.username }}">
+      {% else %}
+        <div class="w-64 h-64 rounded-full mx-auto mb-4 bg-gray-200"></div>
       {% endif %}
       <div class="text-xl font-medium px-4 mb-2">{{ public_user.username }}</div>
+      {% if user == public_user %}
+        <div class="px-4 mb-2">Баланс: <span class="text-green-600">{{ public_user.balance }} ₽</span></div>
+      {% endif %}
       {% if public_user.location %}
         <div class="px-4 mb-1">{{ public_user.location }}</div>
       {% endif %}
