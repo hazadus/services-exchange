@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-  <section class="mx-auto max-w-4xl">
+  <section class="mx-auto max-w-4xl mb-16">
     <div class="border border-gray-100 p-4 mb-4">
       <div class="flex items-center">
         <h1 class="flex-1 text-xl font-semibold mb-2 text-green-600">{{ project.title }}</h1>
@@ -79,13 +79,51 @@
         {# Для заказчика проекта показываем все предложения #}
         <h1 class="text-xl font-semibold mb-2">Предложения исполнителей</h1>
 
-        {% for offer in offers %}
-          <div>{{ offer.candidate.username }} &middot; {{ offer.created }}</div>
-        {% endfor %}
+        <div class="flex flex-col">
+          {% for offer in offers %}
+            <div class="flex p-2 mb-2 bg-gray-100">
+              <!-- Аватарка -->
+              {% if offer.candidate.profile_image %}
+                <a href="{% url 'users:public_profile' offer.candidate.username %}">
+                  <img src="{{ offer.candidate.profile_image.url }}" class="h-16 w-16 mx-1 rounded-full" alt="{{ offer.candidate.username }}">
+                </a>
+              {% else %}
+                <span class="h-16 w-16 mx-1 bg-gray-200 rounded-full"></span>
+              {% endif %}
+              <!-- Инфо -->
+              <div class="flex items-center px-2 flex-1">
+                <div class="flex flex-col flex-1">
+                  <span>
+                    <a href="{% url 'users:public_profile' offer.candidate.username %}" class="hover:underline">
+                      {{ offer.candidate.username }}
+                    </a>
+                  </span>
+                  <span class="text-gray-500">
+                    Создано {{ offer.created }}
+                  </span>
+                </div>
+                <!-- Кнопки -->
+                <div class="flex">
+                  <button class="mr-1 w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Принять</button>
+                  <button class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Отклонить</button>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
       {% else %}
         {# Для остальных пользователей показываем только их предложение #}
         {% if offers.count %}
-          Вы разместили предложениe {{ offers.0.created }}. Статус: {{ offers.0.get_status_display }}.
+          <div class="flex items-center">
+            <div class="flex-1">
+              <div>Вы разместили предложениe {{ offers.0.created }}.</div>
+              <div>Статус: {{ offers.0.get_status_display }}.</div>
+            </div>
+            <!-- Кнопки управления предложением -->
+            <div>
+              <button class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Отменить предложение</button>
+            </div>
+          </div>
         {% endif %}
       {% endif %}
     </div>
