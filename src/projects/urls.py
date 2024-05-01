@@ -8,6 +8,7 @@ from projects.views import (
     ProjectMyListView,
     ProjectUpdateView,
     offer_create_view,
+    offer_set_status_view,
 )
 
 app_name = "projects"
@@ -19,4 +20,9 @@ urlpatterns = [
     path("update/<int:pk>/", ProjectUpdateView.as_view(), name="update"),
     path("delete/<int:pk>/", ProjectDeleteView.as_view(), name="delete"),
     path("offer/create/", offer_create_view, name="offer_create"),
+    path(
+        "offer/set_status/<int:offer_id>/",
+        offer_set_status_view,
+        name="offer_set_status",
+    ),
 ]

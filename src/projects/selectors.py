@@ -36,3 +36,11 @@ def offer_list(project_id: int, candidate: CustomUser | None = None) -> QuerySet
         queryset = queryset.filter(candidate=candidate)
 
     return queryset.all()
+
+
+def offer_get_by_id(offer_id: int) -> Offer | None:
+    return (
+        Offer.objects.filter(id=offer_id)
+        .select_related("project", "candidate", "project__customer")
+        .first()
+    )

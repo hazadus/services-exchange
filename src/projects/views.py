@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -17,10 +18,15 @@ from exchange.selectors import category_get_by_id, category_list_only_available
 from users.models import Action
 from users.services import action_create
 
-from projects.forms import CreateOfferForm
+from projects.forms import OfferCreateForm, OfferSetStatusForm
 from projects.models import Project
-from projects.selectors import offer_list, project_get_by_id, project_list
-from projects.services import offer_create
+from projects.selectors import (
+    offer_get_by_id,
+    offer_list,
+    project_get_by_id,
+    project_list,
+)
+from projects.services import offer_create, offer_set_status
 
 
 class ProjectListView(ListView):
@@ -168,7 +174,7 @@ class ProjectDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 @require_POST
 @login_required
 def offer_create_view(request: HttpRequest) -> HttpResponse:
-    form = CreateOfferForm(request.POST)
+    form = OfferCreateForm(request.POST)
 
     if form.is_valid():
         data = form.cleaned_data
@@ -189,3 +195,34 @@ def offer_create_view(request: HttpRequest) -> HttpResponse:
         return redirect(reverse_lazy("projects:detail", kwargs={"pk": project.pk}))
 
     return redirect(reverse_lazy("projects:list"))
+
+
+@require_POST
+@login_required
+def offer_set_status_view(request: HttpRequest, offer_id: int) -> HttpResponse:
+    offer = offer_get_by_id(offer_id)
+    if offer is None:
+        raise Http404
+
+    if (request.user != offer.candidate) and (request.user != offer.project.customer):
+        raise PermissionDenied(
+            "Статус предложения могут менять только кандидат или заказчик проекта."
+        )
+
+    form = OfferSetStatusForm(request.POST)
+    if form.is_valid():
+        data = form.cleaned_data
+        new_status = data["new_status"]
+
+        offer_set_status(offer=offer, new_status=new_status, actor=request.user)
+
+        if offer.status == new_status:
+            messages.success(request, "Статус предложения успешно изменён.")
+        else:
+            messages.warning(
+                request,
+                "Не удалось изменить статус предложения. Попробуйте ещё раз!",
+                extra_tags="warning",
+            )
+
+    return redirect(reverse_lazy("projects:detail", kwargs={"pk": offer.project.pk}))

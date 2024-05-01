@@ -121,7 +121,11 @@
             </div>
             <!-- Кнопки управления предложением -->
             <div>
-              <button class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Отменить предложение</button>
+              <form action="{% url 'projects:offer_set_status' offers.0.pk %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="new_status" value="cancelled">
+                <button class="w-full text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Отменить предложение</button>
+              </form>
             </div>
           </div>
         {% endif %}

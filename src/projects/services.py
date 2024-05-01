@@ -14,3 +14,15 @@ def offer_create(
     offer = Offer(project=project, candidate=candidate, comment=comment)
     offer.save()
     return offer
+
+
+def offer_set_status(offer: Offer, new_status: str, actor: CustomUser) -> None:
+    """Изменяет статус предложения на указанный (если это возможно)."""
+    match new_status:
+        case "cancelled":
+            if (offer.status == "created") and (offer.candidate == actor):
+                offer.status = "cancelled"
+                offer.is_cancelled = True
+        case _:
+            return None
+    offer.save()
