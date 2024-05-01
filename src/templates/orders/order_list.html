@@ -17,7 +17,7 @@
     <h2 class="text-2xl font-semibold mb-2">В работе</h2>
     <div class="mb-4 pb-4 border-b border-gray-100">
       {% for order in order_list %}
-        {% if order.status == 'created' %}
+        {% if order.status == 'created' or order.status == 'in_progress' %}
           <div>
             <a href="{% url 'orders:detail' order.pk %}" class="hover:underline">
               {{ order }} &middot; {{ order.item.title }}
