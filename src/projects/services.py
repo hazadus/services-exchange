@@ -1,3 +1,4 @@
+from orders.services import order_create
 from users.models import CustomUser
 
 from projects.models import Offer, Project
@@ -17,7 +18,8 @@ def offer_create(
 
 
 def offer_set_status(offer: Offer, new_status: str, actor: CustomUser) -> None:
-    """Изменяет статус предложения на указанный (если это возможно)."""
+    """Изменяет статус предложения на указанный (если это возможно).
+    В случае установки статуса `accepted`, также создаёт соответствующий заказ."""
     match new_status:
         case "cancelled":
             if (offer.status == "created") and (offer.candidate == actor):
@@ -27,6 +29,23 @@ def offer_set_status(offer: Offer, new_status: str, actor: CustomUser) -> None:
             if (offer.status == "created") and (offer.project.customer == actor):
                 offer.status = "declined"
                 offer.is_cancelled = True
+        case "accepted":
+            if (offer.status == "created") and (offer.project.customer == actor):
+                offer.status = "accepted"
+                # Cancel all other offers for the same project
+                other_offers = (
+                    Offer.objects.filter(project=offer.project, is_cancelled=False)
+                    .exclude(id=offer.pk)
+                    .all()
+                )
+                other_offers.update(is_cancelled=True, status="declined")
+                # Create order for this project
+                order_create(
+                    customer=offer.project.customer,
+                    provider=offer.candidate,
+                    item=offer.project,
+                    price=offer.project.price,
+                )
         case _:
             return None
     offer.save()

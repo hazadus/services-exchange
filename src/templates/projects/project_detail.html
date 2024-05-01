@@ -105,11 +105,15 @@
                   </div>
                   <!-- Кнопки / инфо об отмене -->
                   <div class="flex">
-                    {% if offer.is_cancelled %}
+                    {% if offer.is_cancelled or offer.status == 'accepted' %}
                       <span class="text-sm text-gray-500">{{ offer.get_status_display }}</span>
                     {% else %}
-                      <button class="mr-1 w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Принять</button>
-
+                      <!-- Кнопка "Принять" заказчиком -->
+                      <form action="{% url 'projects:offer_set_status' offer.pk %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="new_status" value="accepted">
+                        <button class="mr-1 w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Принять</button>
+                      </form>
                       <!-- Кнопка "Отклонить" заказчиком -->
                       <form action="{% url 'projects:offer_set_status' offer.pk %}" method="POST">
                         {% csrf_token %}
@@ -131,7 +135,9 @@
                 <div>Статус: {{ offers.0.get_status_display }}.</div>
               </div>
               <!-- Кнопки управления предложением - если оно не отменено -->
-              {% if not offers.0.is_cancelled %}
+              {% if offers.0.is_cancelled or offers.0.status == 'accepted' %}
+                <span class="text-sm text-gray-500">{{ offers.0.get_status_display }}</span>
+              {% else %}
                 <div>
                   <form action="{% url 'projects:offer_set_status' offers.0.pk %}" method="POST">
                     {% csrf_token %}
