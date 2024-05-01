@@ -83,6 +83,7 @@ class CustomUser(AbstractUser):
             return self.city.strip()
         elif self.country:
             return self.country.strip()
+        return None
 
 
 class Action(models.Model):

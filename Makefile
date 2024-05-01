@@ -3,6 +3,8 @@ runserver:
 format:
 	black .
 	ruff check . -n --select I --fix
+lint:
+	mypy .
 css:
 	npx tailwindcss -i ./src/static/src/input.css -o ./src/static/styles.css
 prepare:
