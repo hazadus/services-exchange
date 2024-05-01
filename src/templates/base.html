@@ -66,6 +66,9 @@
             <a href="{% url 'users:update' user.pk %}" class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">
               {% include "icons/icon_gear.html" with size="24" color="#6b7280" %}
             </a>
+            <a href="{% url 'users:update_balance' %}" class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">
+              {% include "icons/icon_wallet.html" with size="24" color="#6b7280" %}
+            </a>
             <a href="{% url 'account_logout' %}" class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">
               {% include "icons/icon_logout.html" with size="24" color="#6b7280" %}
             </a>

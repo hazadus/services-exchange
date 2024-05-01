@@ -1,9 +1,11 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import Http404
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, UpdateView
+from django.views.generic import FormView, TemplateView, UpdateView
 
+from users.forms import UpdateUserBalanceForm
 from users.models import CustomUser
 from users.selectors import (
     action_get_latest_project_views,
@@ -12,7 +14,7 @@ from users.selectors import (
 )
 
 
-class PublicUserProfileView(TemplateView):
+class UserPublicProfileView(TemplateView):
     template_name = "users/user_public_profile.html"
 
     def get_context_data(self, **kwargs):
@@ -41,7 +43,7 @@ class PublicUserProfileView(TemplateView):
         return context
 
 
-class UpdateUserView(
+class UserUpdateProfileView(
     LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView
 ):
     model = CustomUser
@@ -67,3 +69,23 @@ class UpdateUserView(
 
     def get_success_url(self):
         return reverse_lazy("users:update", kwargs={"pk": self.get_object().pk})
+
+
+class UserUpdateBalanceView(LoginRequiredMixin, FormView, TemplateView):
+    """Вид пополнения баланса пользователя с карты"""
+
+    form_class = UpdateUserBalanceForm
+    template_name = "users/user_update_balance.html"
+    success_url = reverse_lazy("users:update_balance")
+
+    def form_valid(self, form):
+        amount = form.cleaned_data["amount"]
+        card_number = form.cleaned_data["card_number"]
+
+        # Process data here
+        print(f"User={self.request.user}, {amount=}, {card_number=}")
+
+        messages.info(
+            self.request, f"Создана задача для пополнения вашего баланса на {amount} ₽."
+        )
+        return super().form_valid(form)
