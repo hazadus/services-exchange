@@ -13,7 +13,6 @@ services:
       - "DB_PASSWORD=postgres"
       - "DB_HOST=db"
       - "DB_PORT=5432"
-      - "CELERY_BROKER_URL=amqp://rmuser:rmpassword@rabbitmq:5672//"
     ports:
       - "8000:8000"
     depends_on:
@@ -25,3 +24,21 @@ services:
       - ./docker/postgres:/var/lib/postgresql/data/
     environment:
       - "POSTGRES_HOST_AUTH_METHOD=trust"
+  redis:
+    container_name: "redis"
+    image: redis:7.2.4
+    volumes:
+      - ./docker/redis:/data
+  worker:
+    container_name: "worker"
+    build: ./src
+    volumes:
+      - ./src:/code
+    command: ['celery', '--workdir=/code', '-A', 'django_project', 'worker']
+    environment:
+      - "DEBUG=True"
+      - "DB_NAME=postgres"
+      - "DB_USER=postgres"
+      - "DB_PASSWORD=postgres"
+      - "DB_HOST=db"
+      - "DB_PORT=5432"

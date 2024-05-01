@@ -12,6 +12,7 @@ from users.selectors import (
     action_get_latest_service_views,
     user_get_by_username,
 )
+from users.tasks import user_add_to_balance
 
 
 class UserPublicProfileView(TemplateView):
@@ -82,8 +83,7 @@ class UserUpdateBalanceView(LoginRequiredMixin, FormView, TemplateView):
         amount = form.cleaned_data["amount"]
         card_number = form.cleaned_data["card_number"]
 
-        # Process data here
-        print(f"User={self.request.user}, {amount=}, {card_number=}")
+        user_add_to_balance.delay(self.request.user.pk, amount, card_number)
 
         messages.info(
             self.request, f"Создана задача для пополнения вашего баланса на {amount} ₽."

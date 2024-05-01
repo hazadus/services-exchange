@@ -186,6 +186,17 @@ ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_SIGNUP_REDIRECT_URL = reverse_lazy("core:index")
 ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy("core:index")
 
+
+# Redis
+REDIS_HOST = env.str("REDIS_HOST", "redis")
+REDIS_PORT = env.int("REDIS_PORT", 6379)
+REDIS_DB = env.int("REDIS_DB", 0)
+
+
+# Celery
+CELERY_BROKER_URL = "redis://redis:6379"
+
+
 # Logging
 
 LOGGING = {
