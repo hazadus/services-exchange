@@ -1,11 +1,15 @@
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count, Q, QuerySet
+from orders.models import Order
 from users.models import CustomUser
 
 from projects.models import Offer, Project
 
 
 def project_list(
-    category_id: int | None = None, customer_id: int | None = None
+    category_id: int | None = None,
+    customer_id: int | None = None,
+    exclude_with_orders: bool = False,
 ) -> QuerySet:
     queryset = Project.objects.select_related(
         "category", "category__parent", "category__parent__parent", "customer"
@@ -21,6 +25,16 @@ def project_list(
 
     if customer_id:
         queryset = queryset.filter(customer_id=customer_id)
+
+    if exclude_with_orders:
+        # Выбираем все заказы на проекты
+        orders = Order.objects.filter(
+            item_ct=ContentType.objects.get_for_model(Project)
+        ).all()
+        # Выбираем в список id всех проектов в этих заказов
+        projects_with_orders_pks = list(orders.values_list("item_id", flat=True))
+        # Исключаем проекты с id в списке
+        queryset = queryset.exclude(id__in=projects_with_orders_pks)
 
     return queryset.all()
 
