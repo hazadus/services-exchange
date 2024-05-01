@@ -23,6 +23,10 @@ def offer_set_status(offer: Offer, new_status: str, actor: CustomUser) -> None:
             if (offer.status == "created") and (offer.candidate == actor):
                 offer.status = "cancelled"
                 offer.is_cancelled = True
+        case "declined":
+            if (offer.status == "created") and (offer.project.customer == actor):
+                offer.status = "declined"
+                offer.is_cancelled = True
         case _:
             return None
     offer.save()
