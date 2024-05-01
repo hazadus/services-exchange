@@ -9,7 +9,12 @@ def project_list(
 ) -> QuerySet:
     queryset = Project.objects.select_related(
         "category", "category__parent", "category__parent__parent", "customer"
-    ).annotate(offer_count=Count("offers", filter=Q(offers__is_cancelled=False)))
+    ).annotate(
+        offer_count=Count(
+            "offers",
+            filter=Q(offers__is_cancelled=False) & ~Q(offers__status="accepted"),
+        )
+    )
 
     if category_id:
         queryset = queryset.filter(category_id=category_id)
