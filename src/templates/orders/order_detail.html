@@ -37,7 +37,13 @@
             Cоздан: {{ order.created }}
           </div>
           <div class="mb-1">
+            Бюджет: {{ order.price }} ₽
+          </div>
+          <div class="mb-8">
             Статус: {{ order.get_status_display }}
+          </div>
+          <div>
+            {{ order.item.description|linebreaksbr }}
           </div>
         </div>
 
