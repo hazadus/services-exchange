@@ -15,6 +15,7 @@ from django.views.generic import (
     UpdateView,
 )
 from exchange.selectors import category_get_by_id, category_list_only_available
+from orders.selectors import order_get_by_project_id
 from users.models import Action
 from users.services import action_create
 
@@ -102,6 +103,9 @@ class ProjectDetailView(DetailView):
             candidate = self.request.user
 
         context["offers"] = offer_list(project_id=project.pk, candidate=candidate)
+        context["order"] = order_get_by_project_id(
+            project_id=project.pk, user=self.request.user
+        )
 
         return context
 

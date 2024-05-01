@@ -56,13 +56,13 @@
           Предложений: {{ project.offers.count }}{# Тут будут все предложения, включая уже отклоненные. #}
         </div>
         <div>
-          {% if user == project.customer %}
+          {% if user == project.customer and not order %}
             <!-- Кнопки для управления проектом -->
             <a href="{% url 'projects:update' project.pk %}" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800">Изменить</a>
             <a href="{% url 'projects:delete' project.pk %}" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-red-700 rounded-lg focus:ring-4 focus:ring-red-200 hover:bg-red-800">Удалить</a>
           {% else %}
             <!-- Кнопка подачи заявки -->
-            {% if not offers.count %}
+            {% if not offers.count and not order %}
               <form action="{% url 'projects:offer_create' %}" method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="project_id" value="{{ project.pk }}">
@@ -73,6 +73,20 @@
         </div>
       </div>
     </div>
+
+    {% if order %}
+      <!-- Инфо о заказе на проект (видно только заказчику и исполнителю) -->
+      <div class="border border-gray-100 p-4 mb-4">
+        <div class="flex items-center">
+          <div class="flex-1">
+            <span class="text-xl">{{ order }}</span> <span class="text-gray-500">&middot; {{ order.get_status_display }}</span>
+          </div>
+          <div>
+            <a href="{% url 'orders:detail' order.pk %}" class="mb-1 w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Перейти к заказу</a>
+          </div>
+        </div>
+      </div>
+    {% endif %}
 
     {% if offers.count %}
       <div class="border border-gray-100 p-4 mb-4">
@@ -109,10 +123,10 @@
                       <span class="text-sm text-gray-500">{{ offer.get_status_display }}</span>
                     {% else %}
                       <!-- Кнопка "Принять" заказчиком -->
-                      <form action="{% url 'projects:offer_set_status' offer.pk %}" method="POST">
+                      <form action="{% url 'projects:offer_set_status' offer.pk %}" method="POST" class="mr-1">
                         {% csrf_token %}
                         <input type="hidden" name="new_status" value="accepted">
-                        <button class="mr-1 w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Принять</button>
+                        <button class="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Принять</button>
                       </form>
                       <!-- Кнопка "Отклонить" заказчиком -->
                       <form action="{% url 'projects:offer_set_status' offer.pk %}" method="POST">
