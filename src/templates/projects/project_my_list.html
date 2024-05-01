@@ -21,7 +21,7 @@
             {{ project.category }}
           </a>
         </div>
-        <div>{{ project.price }} ₽ {% if project.offer_count %}&middot; <span class="text-green-600">Предложений: {{ project.offer_count }}</span>{% endif %}</div>
+        <div>{{ project.price }} ₽ {% if project.offer_count %}&middot; <span class="text-green-600">Активных предложений: {{ project.offer_count }}</span>{% endif %}</div>
       </div>
     {% endfor %}
   </div>

@@ -30,7 +30,7 @@ def project_get_by_id(project_id: int) -> Project | None:
 
 
 def offer_list(project_id: int, candidate: CustomUser | None = None) -> QuerySet:
-    queryset = Offer.objects.filter(project_id=project_id, is_cancelled=False)
+    queryset = Offer.objects.filter(project_id=project_id)
 
     if candidate:
         queryset = queryset.filter(candidate=candidate)
