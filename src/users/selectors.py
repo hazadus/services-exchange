@@ -17,6 +17,10 @@ def user_get_by_username(username: str) -> CustomUser | None:
     )
 
 
+def user_get_by_id(user_id: int) -> CustomUser | None:
+    return CustomUser.objects.filter(id=user_id).first()
+
+
 def action_get_latest_service_views(user: CustomUser, count: int = 5) -> QuerySet:
     actions = Action.objects.filter(
         user=user,
