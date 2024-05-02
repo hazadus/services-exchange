@@ -2,7 +2,11 @@ from django.contrib.contenttypes.models import ContentType
 from projects.models import Project
 from services.models import Service
 from users.models import Action, CustomUser
-from users.services import action_create, user_refund_to_balance
+from users.services import (
+    action_create,
+    user_payment_to_balance,
+    user_refund_to_balance,
+)
 
 from orders.models import Order
 
@@ -71,6 +75,7 @@ def order_set_status(order: Order, new_status: str, actor: CustomUser) -> None:
             if (order.status == "submitted_by_provider") and (actor == order.customer):
                 order.status = "accepted_by_customer"
                 order.is_completed = True
+                user_payment_to_balance(user=order.provider, item=order.item)
                 action_create(
                     user=order.customer, verb=Action.RECEIVE_RESULT, target=order
                 )

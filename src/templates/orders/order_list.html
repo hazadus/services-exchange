@@ -17,7 +17,7 @@
     <h2 class="text-2xl font-semibold mb-2">В работе</h2>
     <div class="mb-4 pb-4 border-b border-gray-100">
       {% for order in order_list %}
-        {% if order.status == 'created' or order.status == 'in_progress' %}
+        {% if order.status == 'created' or order.status == 'in_progress' or order.status == 'submitted_by_provider' %}
           <div>
             <a href="{% url 'orders:detail' order.pk %}" class="hover:underline">
               {{ order }} &middot; {{ order.item.title }}
@@ -40,7 +40,6 @@
       {% endfor %}
     </div>
 
-
     <h2 class="text-2xl font-semibold mb-2">Отменены</h2>
     <div class="mb-8">
       {% for order in order_list %}
@@ -53,8 +52,5 @@
         {% endif %}
       {% endfor %}
     </div>
-
-
-
   </section>
 {% endblock content %}
