@@ -2,8 +2,10 @@ import datetime
 
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
+from projects.models import Project
+from services.models import Service
 
-from users.models import Action
+from users.models import Action, CustomUser
 
 
 def action_create(user, verb: str, target=None) -> None:
@@ -26,3 +28,14 @@ def action_create(user, verb: str, target=None) -> None:
 
     if not similar_actions:
         Action.objects.create(user=user, verb=verb, target=target)
+
+
+def user_pay_from_balance(user: CustomUser, item: Project | Service) -> bool:
+    """Уменьшает баланс пользователя на сайте на размер стоимости услуги или проекта,
+    если на балансе достаточно средств."""
+    if user.balance < item.price:
+        return False
+
+    user.balance -= item.price
+    user.save()
+    return True

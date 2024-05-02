@@ -9,6 +9,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView
 from services.selectors import service_get_by_id
 from users.selectors import action_list_for_order
+from users.services import user_pay_from_balance
 
 from orders.forms import CreateServiceOrderForm, OrderChangeStatusForm
 from orders.models import Order
@@ -33,6 +34,16 @@ def order_service_create_view(request: HttpRequest) -> HttpResponse:
 
         if not service:
             raise Http404
+
+        is_paid = user_pay_from_balance(user=request.user, item=service)
+        if not is_paid:
+            messages.warning(
+                request,
+                "На вашем балансе недостаточно средств для оплаты услуги. "
+                "Пополните баланс, и попробуйте еще раз.",
+                extra_tags="warning",
+            )
+            return redirect(reverse_lazy("services:detail", kwargs={"pk": service.pk}))
 
         order = order_create(
             customer=request.user,
