@@ -39,3 +39,9 @@ def user_pay_from_balance(user: CustomUser, item: Project | Service) -> bool:
     user.balance -= item.price
     user.save()
     return True
+
+
+def user_refund_to_balance(user: CustomUser, item: Project | Service) -> None:
+    """Увеличивает баланс пользователя на сайте на размер стоимости услуги или проекта."""
+    user.balance += item.price
+    user.save()

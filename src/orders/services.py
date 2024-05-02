@@ -2,7 +2,7 @@ from django.contrib.contenttypes.models import ContentType
 from projects.models import Project
 from services.models import Service
 from users.models import Action, CustomUser
-from users.services import action_create
+from users.services import action_create, user_refund_to_balance
 
 from orders.models import Order
 
@@ -41,12 +41,14 @@ def order_set_status(order: Order, new_status: str, actor: CustomUser) -> None:
             if (order.status == "created") and (actor == order.customer):
                 order.status = "cancelled_by_customer"
                 order.is_cancelled = True
+                user_refund_to_balance(user=order.customer, item=order.item)
                 action_create(user=actor, verb=Action.CANCEL_ORDER, target=order)
         case "rejected_by_provider":
             # Исполнитель может отклонить заказ, пока он только создан заказчиком:
             if (order.status == "created") and (actor == order.provider):
                 order.status = "rejected_by_provider"
                 order.is_cancelled = True
+                user_refund_to_balance(user=order.customer, item=order.item)
                 action_create(user=actor, verb=Action.REJECT_ORDER, target=order)
         case "in_progress":
             if (order.status == "created") and (actor == order.provider):
