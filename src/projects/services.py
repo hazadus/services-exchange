@@ -1,5 +1,6 @@
 from orders.services import order_create
 from users.models import CustomUser
+from users.services import user_pay_from_balance
 
 from projects.models import Offer, Project
 
@@ -31,6 +32,12 @@ def offer_set_status(offer: Offer, new_status: str, actor: CustomUser) -> None:
                 offer.is_cancelled = True
         case "accepted":
             if (offer.status == "created") and (offer.project.customer == actor):
+                is_paid = user_pay_from_balance(
+                    user=offer.project.customer, item=offer.project
+                )
+                if not is_paid:
+                    return
+
                 offer.status = "accepted"
                 # Cancel all other offers for the same project
                 other_offers = (
