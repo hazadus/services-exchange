@@ -32,7 +32,7 @@ class UserPublicProfileView(TemplateView):
         context["public_user"] = public_user
 
         if self.request.user == public_user:
-            # Если пользователь смотрит свой публичный профиль, добаим инфо
+            # Если пользователь сам смотрит свой публичный профиль, добавим инфо
             # о последних просмотренных услугах и проектах
             context["actions_services_viewed"] = action_get_latest_service_views(
                 user=public_user
