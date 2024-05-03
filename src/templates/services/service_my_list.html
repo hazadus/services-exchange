@@ -5,24 +5,30 @@
 {% endblock %}
 
 {% block content %}
-  <div class="flex items-center mb-4">
-    <h1 class="text-2xl font-semibold flex-1">Мои услуги</h1>
-    <a class="inline-flex items-center px-5 py-2.5 mt-4 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800" href="{% url 'services:create' %}">Создать услугу</a>
-  </div>
+  <section class="mx-auto max-w-5xl">
+    <div class="flex items-center mb-4">
+      <h1 class="text-2xl font-semibold flex-1">Мои услуги</h1>
+      <a class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800" href="{% url 'services:create' %}">Создать услугу</a>
+    </div>
 
-  <div>
-    {% for service in service_list %}
-      <div class="p-4 border border-gray-100 mb-2 shadow-md">
-        <div class="mb-2">
-          <a href="{% url 'services:detail' service.pk %}" class="text-xl font-medium hover:underline">{{ service.title }}</a>
+    <div>
+      {% if not service_list.count %}
+        {% include "alert.html" with message="Вы пока не разместили на сайти ни одной услуги." style="info" %}
+      {% endif %}
+
+      {% for service in service_list %}
+        <div class="p-4 border border-gray-100 mb-2 shadow-md">
+          <div class="mb-2">
+            <a href="{% url 'services:detail' service.pk %}" class="text-xl font-medium hover:underline">{{ service.title }}</a>
+          </div>
+          <div class="mb-1">
+            <a href="{% url 'services:list' %}?category_id={{ service.category.pk }}" class="text-gray-500 hover:underline">
+              {{ service.category }}
+            </a>
+          </div>
+          <div>{{ service.price }} ₽ – {{ service.term }} дней</div>
         </div>
-        <div class="mb-1">
-          <a href="{% url 'services:list' %}?category_id={{ service.category.pk }}" class="text-gray-500 hover:underline">
-            {{ service.category }}
-          </a>
-        </div>
-        <div>{{ service.price }} ₽ – {{ service.term }} дней</div>
-      </div>
-    {% endfor %}
-  </div>
+      {% endfor %}
+    </div>
+  </section>
 {% endblock content %}

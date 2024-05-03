@@ -8,7 +8,7 @@
   <section class="mx-auto max-w-5xl">
     <div class="grid grid-cols-12 gap-5">
       <div class="col-span-8 flex flex-col">
-        <!-- Карточка заказа -->
+        <!-- MARK: Карточка заказа -->
         <div class="border border-gray-100 p-4 mb-4">
           <h1 class="text-3xl font-semibold mb-4">Заказ №{{ order.pk }}</h1>
 
@@ -47,13 +47,49 @@
           </div>
         </div>
 
-        <!-- История событий по заказу -->
+        <!-- MARK: История событий по заказу -->
         <div class="border border-gray-100 p-4 mb-4">
           <h2 class="text-xl font-medium mb-2">История событий по заказу</h2>
 
           {% for action in actions %}
             <div>{{ action.user }} {{ action.verb }} <span class="text-gray-500 text-sm">&middot; {{ action.created }}</span></div>
           {% endfor %}
+        </div>
+
+        <!-- MARK: Сообщения -->
+        <div class="border border-gray-100 p-4 mb-4">
+          <h2 class="text-xl font-medium mb-2">Сообщения</h2>
+
+          {% if chat_messages.count %}
+            <div class="flex flex-col mb-4">
+              {% for message in chat_messages %}
+                <div class="p-4 flex flex-col" id="message_{{ message.pk }}">
+                  <div class="text-sm">{{ message.sender.username }} пишет <span class="text-gray-500">&middot; {{ message.created }}</span></div>
+                  <div>{{ message.text }}</div>
+                  {% if message.file %}
+                    <div class="text-sm text-gray-500">Файл: <a href="{{ message.file.url }}" class="hover:underline">{{ message.file.name }}</a></div>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <form action="{% url 'exchange:message_create' %}" method="POST" enctype="multipart/form-data" class="mb-2">
+            {% csrf_token %}
+            <input type="hidden" name="topic_ct" value="Order">
+            <input type="hidden" name="topic_id" value="{{ order.pk }}">
+            {% if user == order.customer %}
+              <input type="hidden" name="recipient_id" value={{ order.provider.pk }}>
+            {% else %}
+              <input type="hidden" name="recipient_id" value={{ order.customer.pk }}>
+            {% endif %}
+            <textarea name="text" required cols="40" rows="5" minlength="3" maxlength="1500" class="mb-2 textarea px-4 py-2 text-gray-700 bg-white focus:outline-none w-full border appearance-none block leading-normal rounded-lg border-gray-300"></textarea>
+            <div class="flex items-center">
+              <div class="flex-1">Прикрепить: <input type="file" name="file" accept="*/*"></div>
+              <button class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Отправить</button>
+            </div>
+          </form>
+          {% include "alert.html" with message="Вы можете прикрепить файл к вашему сообщению." style="info" %}
         </div>
       </div>
 
@@ -72,7 +108,7 @@
             {% endif %}
 
             {% if user == order.customer %}
-              <!-- Кнопки действий для заказчика -->
+              <!-- MARK: Кнопки действий для заказчика -->
               {% if order.status == 'created' %}
                 {# Пока заказ не принят исполнителем, заказчик может отменить его. #}
                 <form action="{% url 'orders:set_status' order.pk %}" method="POST">
@@ -99,7 +135,7 @@
                 <p class="text-sm">Вы вернули заказ на доработку исполнителю. Дожидайтесь завершения работы.</p>
               {% endif %}
             {% else %}
-              <!-- Кнопки действий для исполнителя -->
+              <!-- MARK: Кнопки действий для исполнителя -->
               {% if order.status == 'created' %}
                 {# Пока заказ только создан, исполнитель может принять или отклонить его. #}
                 <form action="{% url 'orders:set_status' order.pk %}" method="POST">

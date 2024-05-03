@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView
+from exchange.selectors import message_list_for_topic
 from services.selectors import service_get_by_id
 from users.selectors import action_list_for_order
 from users.services import user_pay_from_balance
@@ -104,8 +105,8 @@ class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         context = super().get_context_data(**kwargs)
 
         order = self.get_object()
-        actions = action_list_for_order(order_id=order.pk)
-        context["actions"] = actions
+        context["actions"] = action_list_for_order(order_id=order.pk)
+        context["chat_messages"] = message_list_for_topic(topic=order)
 
         return context
 
