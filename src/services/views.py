@@ -8,7 +8,11 @@ from django.views.generic import (
     ListView,
     UpdateView,
 )
-from exchange.selectors import category_get_by_id, category_list_only_available
+from exchange.selectors import (
+    category_get_by_id,
+    category_list_only_available,
+    category_list_only_with_services,
+)
 from users.models import Action
 from users.services import action_create
 
@@ -33,6 +37,7 @@ class ServiceListView(ListView):
             category = category_get_by_id(category_id)
             context["category"] = category
 
+        context["categories"] = category_list_only_with_services()
         return context
 
 

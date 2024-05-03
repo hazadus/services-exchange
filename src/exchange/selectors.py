@@ -1,5 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Count, Q
 from orders.models import Order
 
 from exchange.models import Category, Chat, Message
@@ -15,6 +15,28 @@ def category_list_only_available() -> QuerySet:
     """Возвращает только категории, доступные для назначения услугам и проектам –
     то есть не имеющие подкатегорий."""
     return category_list().filter(subcategories=None).all()
+
+
+def category_list_only_with_services() -> QuerySet:
+    """Возвращает категории, в которых есть услуги, с количеством услуг."""
+    return (
+        category_list()
+        .annotate(service_count=Count("services"))
+        .filter(service_count__gt=0)
+        .order_by("-service_count")
+        .all()
+    )
+
+
+def category_list_only_with_projects() -> QuerySet:
+    """Возвращает категории, в которых есть активные проекты, с количеством таких проектов."""
+    return (
+        category_list()
+        .annotate(project_count=Count("projects", filter=Q(projects__is_active=True)))
+        .filter(project_count__gt=0)
+        .order_by("-project_count")
+        .all()
+    )
 
 
 def category_get_by_id(category_id: int) -> Category | None:

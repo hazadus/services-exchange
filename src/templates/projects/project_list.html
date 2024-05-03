@@ -18,11 +18,13 @@
       <!-- Left column 1/3 - filters -->
       <div class="col-span-3 flex flex-col">
         <div class="p-4 bg-gray-100 rounded-md">
-          <h2 class="text-xl font-medium">Рубрики</h2>
-          <div>...</div>
-          <div>...</div>
-          <div>...</div>
-          <div>...</div>
+          <h2 class="text-xl font-medium mb-2">Рубрики</h2>
+          <ul>
+            <li><a href="{% url 'projects:list' %}" class="hover:underline">Все</a></li>
+            {% for cat in categories %}
+              <li><a href="{% url 'projects:list' %}?category_id={{ cat.pk }}" class="hover:underline">{{ cat.title }}</a> <span class="text-gray-500">({{ cat.project_count }})</span></li>
+            {% endfor %}
+          </ul>
         </div>
       </div>
 
