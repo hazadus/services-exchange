@@ -21,16 +21,13 @@
 
 ## Запуск приложения
 
-### В режиме разработки
-
 Создать файл `src/.env` со следущими параметрами:
 
 ```bash
 SECRET_KEY="long-random-string"
-DEBUG=True
 ```
 
-#### Запуск в докере
+### Запуск в режиме разработки
 
 ```bash
 make dev_up
@@ -40,8 +37,26 @@ docker compose -f docker-compose.dev.yml up
 docker exec -it web python -m manage migrate
 # Создать суперпользователя
 docker exec -it web python -m manage createsuperuser
+# Загрузить фикстуры категорий
+docker exec -it web python -m manage loaddata exchange/fixtures/categories.json
 # Остановить
 docker compose -f docker-compose.dev.yml down
 ```
 
 Приложение будет доступно по адресу [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
+
+### Запуск на сервере
+
+```bash
+docker compose up -d --build
+# Применить миграции
+docker exec -it web python -m manage migrate
+# Создать суперпользователя
+docker exec -it web python -m manage createsuperuser
+# Загрузить фикстуры категорий
+docker exec -it web python -m manage loaddata exchange/fixtures/categories.json
+# Создать статические файлы
+docker exec web python manage.py collectstatic --noinput
+# Остановить
+docker compose down
+```

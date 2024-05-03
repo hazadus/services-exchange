@@ -159,11 +159,13 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 
-docker/
+docker/redis
 docker/postgres/
+docker/nginx/logs/
 .ruff_cache/
 misc/cats/
 
 *.bin
 src/uploads/
 node_modules/
+src/staticfiles

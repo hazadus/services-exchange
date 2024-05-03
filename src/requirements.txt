@@ -15,6 +15,7 @@ django-debug-toolbar==4.3.0
 django-stubs==5.0.0
 django-stubs-ext==5.0.0
 environs==11.0.0
+gunicorn==22.0.0
 kombu==5.3.7
 marshmallow==3.21.1
 mypy==1.10.0
@@ -36,3 +37,4 @@ typing_extensions==4.11.0
 tzdata==2024.1
 vine==5.1.0
 wcwidth==0.2.13
+whitenoise==6.6.0
