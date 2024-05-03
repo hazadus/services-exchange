@@ -32,6 +32,14 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     "0.0.0.0",
+    "217.25.90.76",
+    "exchange.amgold.ru",
+]
+
+# Reference: https://docs.djangoproject.com/en/4.2/ref/settings/#csrf-trusted-origins
+CSRF_TRUSTED_ORIGINS = [
+    "http://exchange.amgold.ru",
+    "https://exchange.amgold.ru",
 ]
 
 if DEBUG:
