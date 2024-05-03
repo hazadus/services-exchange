@@ -1,16 +1,81 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}
   Добро пожаловать на Биржу Услуг!
 {% endblock %}
 
 {% block content %}
-  <h1 class="text-xl font-semibold mb-2">Добро пожаловать на Биржу Услуг!</h1>
-  <p class="mb-2">Это главная страница с информацией о сайте.</p>
+  <div class="mx-auto max-w-5xl">
+    {% if messages %}
+      {% for message in messages %}
+        {% include "alert.html" with message=message style="info" %}
+      {% endfor %}
+    {% endif %}
 
-  {% if messages %}
-    {% for message in messages %}
-      {% include "alert.html" with message=message style="info" %}
-    {% endfor %}
-  {% endif %}
+    <!-- MARK: CTA -->
+    <section class="bg-white">
+      <div class="gap-8 items-center py-8 px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6">
+        <img class="w-full" src="{% static "images/cta1.jpg" %}" alt="">
+        <div class="mt-4 md:mt-0">
+          <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900">Заказывайте услуги или помогайте выполнить проекты.</h2>
+          <p class="mb-6 font-light text-gray-500 md:text-lg">На Бирже Услуг каждый может разместить информацию о своих услугах, или предложить свой проект другим пользователям.</p>
+          {% if user_mode == "buyer" %}
+            <a href="{% url 'services:list' %}" class="inline-flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+              Все услуги
+              <svg class="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+            </a>
+          {% else %}
+            <a href="{% url 'projects:list' %}" class="inline-flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+              Биржа проектов
+              <svg class="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+            </a>
+        {% endif %}
+        </div>
+      </div>
+    </section>
+
+    <!-- MARK: Как пользоваться -->
+    <section class="bg-white">
+      <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+        <div class="max-w-screen-md mb-8 lg:mb-16">
+          <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900">Получить услуги очень просто!</h2>
+          <p class="text-gray-500 sm:text-xl">Став пользователем сайта, вы сможете заказывать услуги, или заработать на выполнении проектов других пользователей, всего за несколько простых шагов:</p>
+        </div>
+        <div class="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-12 md:space-y-0">
+          <div>
+            <div class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-100 lg:h-12 lg:w-12">
+              <svg class="w-5 h-5 text-blue-600 lg:w-6 lg:h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd"></path><path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z"></path></svg>                    
+            </div>
+            <h3 class="mb-2 text-xl font-bold">Выберите услугу</h3>
+            <p class="text-gray-500">Вы можете выбрать любую услугу, предоставляемую пользователями сайта. Если не найдётся ничего подходящего, просто создайте свой проект!</p>
+          </div>
+          <div>
+            <div class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-100 lg:h-12 lg:w-12">
+              <svg class="w-5 h-5 text-blue-600 lg:w-6 lg:h-6" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M6 22q-.825 0-1.412-.587T4 20V8q0-.825.588-1.412T6 6h2q0-1.65 1.175-2.825T12 2t2.825 1.175T16 6h2q.825 0 1.413.588T20 8v12q0 .825-.587 1.413T18 22zm4-16h4q0-.825-.587-1.412T12 4t-1.412.588T10 6m5 5q.425 0 .713-.288T16 10V8h-2v2q0 .425.288.713T15 11m-6 0q.425 0 .713-.288T10 10V8H8v2q0 .425.288.713T9 11"/></svg>            </div>
+            <h3 class="mb-2 text-xl font-bold">Оформите заказ</h3>
+            <p class="text-gray-500">Заказывайте понравившиеся услуги других пользователей. При заказе с вашего баланса спишется стоимость услуги.</p>
+          </div>
+          <div>
+            <div class="flex justify-center items-center mb-4 w-10 h-10 rounded-full bg-blue-100 lg:h-12 lg:w-12">
+              <svg class="w-5 h-5 text-blue-600 lg:w-6 lg:h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+            </div>
+            <h3 class="mb-2 text-xl font-bold">Получите результат</h3>
+            <p class="text-gray-500">Принимайте работу, когда будете удовлетворены результатами! Исполнитель получит стоимость услуги на свой баланс, как только вы примете работу.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MARK: Disclaimer -->
+    <section class="bg-white">
+      <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+        <div class="mx-auto max-w-screen-sm text-center">
+          <h2 class="mb-4 text-4xl tracking-tight font-extrabold leading-tight text-gray-900">Сайт работает в демо-режиме!</h2>
+          <p class="mb-6 font-light text-gray-500 md:text-lg">Этот сайт запущен в демонстрационных целях. Вы можете зарегистрироваться, попробовать реализованные возможности, но настоящая оплата услуг не подключена.</p>
+          <a href="https://github.com/hazadus/services-exchange" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none">Узнать подробнее</a>
+        </div>
+      </div>
+    </section>
+  </div>
 {% endblock content %}

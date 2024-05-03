@@ -15,10 +15,13 @@
               <a href="{% url 'exchange:category_list' %}" class="hover:underline">Рубрики</a>
             </li>
             {% if user.is_authenticated %}
-              <li>
+              <li class="mb-4">
                 <a href="{% url 'orders:list' %}" class="hover:underline">Мои заказы</a>
               </li>
             {% endif %}
+            <li>
+              <a href="{% url "core:index" %}" class="hover:underline">О сайте</a>
+            </li>
           </ul>
         </div>
         <div>
