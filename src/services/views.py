@@ -26,7 +26,8 @@ class ServiceListView(ListView):
 
     def get_queryset(self):
         category_id = self.request.GET.get("category_id", None)
-        return service_list(category_id=category_id)
+        search = self.request.GET.get("search", None)
+        return service_list(category_id=category_id, search=search)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -38,6 +39,7 @@ class ServiceListView(ListView):
             context["category"] = category
 
         context["categories"] = category_list_only_with_services()
+        context["search"] = self.request.GET.get("search", None)
         return context
 
 

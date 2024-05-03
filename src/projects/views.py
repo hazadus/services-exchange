@@ -40,7 +40,10 @@ class ProjectListView(ListView):
 
     def get_queryset(self):
         category_id = self.request.GET.get("category_id", None)
-        return project_list(category_id=category_id, exclude_with_orders=True)
+        search = self.request.GET.get("search", None)
+        return project_list(
+            category_id=category_id, exclude_with_orders=True, search=search
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -52,6 +55,7 @@ class ProjectListView(ListView):
             context["category"] = category
 
         context["categories"] = category_list_only_with_projects()
+        context["search"] = self.request.GET.get("search", None)
         return context
 
 

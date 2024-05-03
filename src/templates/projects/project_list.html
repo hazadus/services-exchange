@@ -6,11 +6,15 @@
 
 {% block content %}
   <section class="mx-auto max-w-6xl">
-    {% if category %}
-      <div class="text-gray-500 mb-4">{{ category }}</div>
-      <h1 class="text-2xl font-semibold mb-8">{{ category.title }}</h1>
+    {% if search %}
+      <h1 class="text-2xl font-semibold mb-8">Поиск проектов по запросу &laquo;{{ search }}&raquo;</h1>
     {% else %}
-      <h1 class="text-2xl font-semibold mb-8">Биржа проектов</h1>
+      {% if category %}
+        <div class="text-gray-500 mb-4">{{ category }}</div>
+        <h1 class="text-2xl font-semibold mb-8">{{ category.title }}</h1>
+      {% else %}
+        <h1 class="text-2xl font-semibold mb-8">Биржа проектов</h1>
+      {% endif %}
     {% endif %}
 
     <div class="text-gray-500 mb-4">{{ project_list.count }} результатов</div>
@@ -31,30 +35,13 @@
       <!-- Right column 3/4 - projects -->
       <div class="col-span-9">
         <!-- MARK: Строка поиска  -->
-        <div class="mx-auto w-full mb-4">
-          <div class="relative bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">
-            <div class="flex flex-col items-center justify-between p-4 space-y-3 md:flex-row md:space-y-0 md:space-x-4">
-              <div class="w-full">
-                <form class="flex items-center">
-                  <label for="simple-search" class="sr-only">Поиск</label>
-                  <div class="relative w-full">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                      <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                      </svg>
-                    </div>
-                    <input type="text" id="simple-search" class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Поиск" required="">
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
+        {% include "search_form.html" with search=search %}
 
         {% if project_list.count %}
           <div class="flex flex-col">
             {% for project in project_list %}
-              <div class="flex flex-col p-4 mb-4 border border-gray-100 hover:shadow-md">
+              <!-- MARK: Карточка проекта -->
+              <div class="flex flex-col p-4 mb-4 border border-gray-100 hover:shadow-md rounded-lg">
                 <div class="flex mb-1">
                   <a class="flex-1 text-xl font-medium hover:underline" href="{% url 'projects:detail' project.pk %}">{{ project.title }}</a>
                   <div class="text-xl text-green-500">{{ project.price }} ₽</div>
