@@ -43,10 +43,9 @@ def message_create_view(request: HttpRequest) -> HttpResponse:
     """
     Отправляет сообщение в чат, связанный с заказом. Пока чаты есть только в заказах.
 
-    TODO: make it work with file attachments
     TODO: make it work not only with orders
     """
-    form = MessageCreateForm(request.POST)
+    form = MessageCreateForm(request.POST, request.FILES)
 
     if form.is_valid():
         data = form.cleaned_data
@@ -57,7 +56,7 @@ def message_create_view(request: HttpRequest) -> HttpResponse:
         recipient_id = data["recipient_id"]
         recipient = user_get_by_id(recipient_id)
         text = data["text"]
-        file = None
+        file = request.FILES["file"]
 
         message = message_create(
             sender=sender, recipient=recipient, topic=order, text=text, file=file

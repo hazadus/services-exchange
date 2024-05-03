@@ -42,6 +42,7 @@ def message_create(
         sender=sender,
         recipient=recipient,
         text=text,
+        file=file,
     )
     message.save()
     return message
