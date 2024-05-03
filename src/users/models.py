@@ -22,7 +22,7 @@ class CustomUser(AbstractUser):
         null=True,
         blank=True,
     )
-    description = models.CharField(
+    description = models.TextField(
         verbose_name="информация о вас и вашем опыте",
         max_length=1200,
         null=True,
