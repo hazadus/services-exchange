@@ -31,15 +31,27 @@
         {% if project_list.count %}
           <div class="flex flex-col">
             {% for project in project_list %}
-              <div class="p-2 mb-4 border border-gray-100 hover:shadow-md">
-                <h2>
-                  <a class="text-xl font-medium mb-2 hover:underline" href="{% url 'projects:detail' project.pk %}">{{ project.title }}</a>
-                </h2>
+              <div class="flex flex-col p-4 mb-4 border border-gray-100 hover:shadow-md">
+                <div class="flex mb-1">
+                  <a class="flex-1 text-xl font-medium hover:underline" href="{% url 'projects:detail' project.pk %}">{{ project.title }}</a>
+                  <div class="text-xl text-green-500">{{ project.price }} ₽</div>
+                </div>
                 {% if not category %}
-                  <a class="text-gray-500 mb-1 hover:underline" href="{% url 'projects:list' %}?category_id={{ project.category.pk }}">{{ project.category }}</a>
+                  <a class="text-gray-500 mb-2 hover:underline" href="{% url 'projects:list' %}?category_id={{ project.category.pk }}">{{ project.category }}</a>
                 {% endif %}
-                <div class="text-green-500 mb-1">{{ project.price }} ₽</div>
-                <div >Заказчик: <a href="{%  url 'users:public_profile' project.customer.username %}" class="hover:underline">{{ project.customer.username }}</a></div>
+                <div class="flex">
+                  <a href="{% url 'users:public_profile' project.customer.username %}">
+                    {% if project.customer.profile_image %}
+                      <img src="{{ project.customer.profile_image.url }}" class="h-16 w-16" alt="{{ project.customer.username }}">
+                    {% else %}
+                      <div class="h-16 w-16 mx-1 bg-gray-200"></div>
+                    {% endif %}
+                  </a>
+                  <div class="flex flex-col px-2">
+                    <span>Покупатель: <a href="{% url 'users:public_profile' project.customer.username %}" class="hover:underline">{{ project.customer.username }}</a></span>
+                    <span>Размещено проектов на бирже: {{ project.customer.projects.count }}</span>
+                  </div>
+                </div>
               </div>
             {% endfor %}
           </div>

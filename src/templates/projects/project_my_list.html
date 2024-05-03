@@ -18,15 +18,22 @@
 
       {% for project in project_list %}
         <div class="p-4 border border-gray-100 mb-2 shadow-md">
-          <div class="mb-2">
-            <a href="{% url 'projects:detail' project.pk %}" class="text-xl font-medium hover:underline">{{ project.title }}</a>
+          <div class="flex mb-2 items-center">
+            <div class="flex-1">
+              <a href="{% url 'projects:detail' project.pk %}" class="text-xl font-medium hover:underline">{{ project.title }}</a>
+            </div>
+            <div class="text-xl text-green-600">
+              {{ project.price }} ₽
+            </div>
           </div>
           <div class="mb-1">
             <a href="{% url 'projects:list' %}?category_id={{ project.category.pk }}" class="text-gray-500 hover:underline">
               {{ project.category }}
             </a>
           </div>
-          <div>{{ project.price }} ₽ {% if project.offer_count %}&middot; <span class="text-green-600">Активных предложений: {{ project.offer_count }}</span>{% endif %}</div>
+          <div>
+            {% if project.offer_count %}<span class="text-green-600">Активных предложений: {{ project.offer_count }}</span>{% endif %}
+          </div>
         </div>
       {% endfor %}
     </div>
