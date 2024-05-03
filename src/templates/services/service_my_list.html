@@ -17,16 +17,31 @@
       {% endif %}
 
       {% for service in service_list %}
-        <div class="p-4 border border-gray-100 mb-2 shadow-md">
-          <div class="mb-2">
-            <a href="{% url 'services:detail' service.pk %}" class="text-xl font-medium hover:underline">{{ service.title }}</a>
+        <div class="flex border border-gray-100 mb-2 shadow-md">
+          {# Обложка #}
+          {% if service.image %}
+            <img src="{{ service.image.url }}" class="h-36 w-64 object-cover" />
+          {% else %}
+            <div class="p-0 m-0 h-36 w-64 bg-gray-50"></div>
+          {% endif %}
+          {# Инфо об услуге #}
+          <div class="flex flex-col flex-1 p-4">
+            <div class="flex items-center mb-2">
+              <div class="flex-1">
+                <a href="{% url 'services:detail' service.pk %}" class="text-xl font-medium hover:underline">{{ service.title }}</a>
+              </div>
+              <div class="text-xl text-green-600">{{ service.price }} ₽</div>
+            </div>
+
+            <div class="flex items-center mb-2">
+              <div class="flex-1">
+                <a href="{% url 'services:list' %}?category_id={{ service.category.pk }}" class="text-gray-500 hover:underline">
+                  {{ service.category }}
+                </a>
+              </div>
+              <div>{{ service.term }} дней</div>
+            </div>
           </div>
-          <div class="mb-1">
-            <a href="{% url 'services:list' %}?category_id={{ service.category.pk }}" class="text-gray-500 hover:underline">
-              {{ service.category }}
-            </a>
-          </div>
-          <div>{{ service.price }} ₽ – {{ service.term }} дней</div>
         </div>
       {% endfor %}
     </div>
