@@ -1,5 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
-from django.db.models import QuerySet, Count, Q
+from django.db.models import Count, Q, QuerySet
 from orders.models import Order
 
 from exchange.models import Category, Chat, Message

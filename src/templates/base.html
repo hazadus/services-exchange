@@ -21,15 +21,15 @@
 
         <!-- Menu -->
         <div class="flex-1 flex justify-center items-center">
+          <!-- Переключение покупатель / продавец -->
+          <a class="text-center {% if user_mode == 'buyer' %}bg-gray-200 font-medium{% else %}hover:bg-gray-200 font-light{% endif %} p-2 mx-0.5 rounded-lg" href="{% url 'exchange:set_user_mode' %}?mode=buyer&redirect_to={{ request.path }}">Я покупатель</a>
+          <a class="text-center mr-4 {% if user_mode == 'seller' %}bg-gray-200 font-medium{% else %}hover:bg-gray-200 font-light{% endif %} p-2 mx-0.5 rounded-lg" href="{% url 'exchange:set_user_mode' %}?mode=seller&redirect_to={{ request.path }}">Я продавец</a>
           {% if user.is_authenticated %}
-            <!-- Переключение покупатель / продавец -->
-            <a class="text-center {% if user_mode == 'buyer' %}bg-gray-200 font-medium{% else %}hover:bg-gray-200 font-light{% endif %} p-2 mx-0.5 rounded-lg" href="{% url 'exchange:set_user_mode' %}?mode=buyer&redirect_to={{ request.path }}">Я покупатель</a>
-            <a class="text-center mr-4 {% if user_mode == 'seller' %}bg-gray-200 font-medium{% else %}hover:bg-gray-200 font-light{% endif %} p-2 mx-0.5 rounded-lg" href="{% url 'exchange:set_user_mode' %}?mode=seller&redirect_to={{ request.path }}">Я продавец</a>
             {% if user_mode == 'buyer' %}
               <!-- "Я покупатель" -->
-              <!-- Проекты пользователя: /projects/ -->
+              <!-- Проекты пользователя -->
               <a class="text-center p-2 hover:bg-gray-200 mx-0.5 rounded-lg font-light" href="{% url 'projects:my_list' %}">Мои проекты</a>
-              <!-- Полный каталог услуг: /exchange/services/ -->
+              <!-- Полный каталог услуг -->
               <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg font-light" href="{% url 'services:list' %}">Услуги</a>
               <!-- То, что заказал пользователь -->
               <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg font-light" href="{% url 'orders:list' %}">Заказы</a>
@@ -37,7 +37,7 @@
               <!-- "Я продавец" -->
               <!-- Услуги, которые предлагает пользователь -->
               <a class="text-center p-2 hover:bg-gray-200 mx-0.5 rounded-lg font-light" href="{% url 'services:my_list' %}">Мои услуги</a>
-              <!-- "Биржа" - полный каталог проектов: /exchange/projects/ -->
+              <!-- "Биржа" - полный каталог проектов -->
               <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg font-light" href="{% url 'projects:list' %}">Биржа</a>
               <!-- То, что заказали у меня -->
               <a class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg font-light" href="{% url 'orders:list' %}">Заказы</a>
@@ -74,9 +74,6 @@
             <a href="{% url 'account_logout' %}" class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">
               {% include "icons/icon_logout.html" with size="24" color="#6b7280" %}
             </a>
-            {% if user.is_superuser %}
-              <a href="/admin/" class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg font-light">Админка</a>
-            {% endif %}
           {% else %}
             <a href="{% url 'account_signup' %}" class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Регистрация</a>
             <a href="{% url 'account_login' %}" class="p-2 hover:bg-gray-200 mx-0.5 rounded-lg">Вход</a>
@@ -85,10 +82,13 @@
       </div>
 
       <!-- Content -->
-      <div class="p-8">
+      <div class="p-8 mb-8" style="min-height: calc(100vh - 2*64px - 100px);">
         {% block content %}
         {% endblock content %}
       </div>
+
+      <!-- Footer -->
+      {% include "footer.html" %}
     </div>
   </div>
 </body>

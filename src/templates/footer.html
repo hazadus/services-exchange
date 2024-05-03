@@ -1,0 +1,109 @@
+<footer class="p-4 bg-white sm:p-6 border-t border-gray-100">
+  <div class="mx-auto max-w-screen-xl">
+    <div class="md:flex md:justify-between">
+      <div class="mb-6 md:mb-0">
+        <a href="#" class="flex items-center">
+          <svg class="mr-3 h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M12 9L8.5 5.5L12 2l3.5 3.5zM1 20v-4q0-.85.588-1.425T3 14h3.275q.5 0 .95.25t.725.675q.725.975 1.788 1.525T12 17q1.225 0 2.288-.55t1.762-1.525q.325-.425.763-.675t.912-.25H21q.85 0 1.425.575T23 16v4h-7v-2.275q-.875.625-1.888.95T12 19q-1.075 0-2.1-.337T8 17.7V20zm3-7q-1.25 0-2.125-.875T1 10q0-1.275.875-2.137T4 7q1.275 0 2.138.863T7 10q0 1.25-.862 2.125T4 13m16 0q-1.25 0-2.125-.875T17 10q0-1.275.875-2.137T20 7q1.275 0 2.138.863T23 10q0 1.25-.862 2.125T20 13"/></svg>
+          <span class="self-center text-2xl font-semibold whitespace-nowrap">Биржа Услуг</span>
+        </a>
+      </div>
+      <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-4">
+        <div>
+          <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase">Биржа</h2>
+          <ul class="text-gray-600">
+            <li class="mb-4">
+              <a href="{% url 'exchange:category_list' %}" class="hover:underline">Рубрики</a>
+            </li>
+            {% if user.is_authenticated %}
+              <li>
+                <a href="{% url 'orders:list' %}" class="hover:underline">Мои заказы</a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+        <div>
+          <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase">Проекты</h2>
+          <ul class="text-gray-600">
+            {% if user.is_authenticated %}
+              <li class="mb-4">
+                <a href="{% url 'projects:create' %}" class="hover:underline">Создать проект</a>
+              </li>
+              <li class="mb-4">
+                <a href="{% url 'projects:my_list' %}" class="hover:underline">Мои проекты</a>
+              </li>
+            {% endif %}
+            <li>
+              <a href="{% url 'projects:list' %}" class="hover:underline">Биржа проектов</a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase">Услуги</h2>
+          <ul class="text-gray-600">
+            {% if user.is_authenticated %}
+              <li class="mb-4">
+                <a href="{% url 'services:create' %}" class="hover:underline ">Разместить услугу</a>
+              </li>
+              <li class="mb-4">
+                <a href="{% url 'services:my_list' %}" class="hover:underline">Мои услуги</a>
+              </li>
+            {% endif %}
+            <li>
+              <a href="{% url 'services:list' %}" class="hover:underline">Все услуги</a>
+            </li>
+          </ul>
+        </div>
+        <div class="mr-2">
+          <h2 class="mb-6 text-sm font-semibold text-gray-900 uppercase">Учетная запись</h2>
+          <ul class="text-gray-600">
+            {% if user.is_authenticated %}
+              <li class="mb-4">
+                <a href="{% url 'users:public_profile' user.username %}" class="hover:underline">Профиль</a>
+              </li>
+              <li class="mb-4">
+                <a href="{% url 'users:update' user.pk %}" class="hover:underline">Настройки</a>
+              </li>
+              <li class="mb-4">
+                <a href="{% url 'users:update_balance' %}" class="hover:underline">Баланс</a>
+              </li>
+              {% if user.is_superuser %}
+                <li class="mb-4">
+                  <a href="/admin/" class="hover:underline">Админка</a>
+                </li>
+              {% endif %}
+              <li class="mb-4">
+                <a href="{% url 'account_logout' %}" class="hover:underline">Выйти</a>
+              </li>
+            {% else %}
+              <li class="mb-4">
+                <a href="{% url 'account_signup' %}" class="hover:underline">Регистрация</a>
+              </li>
+              <li>
+                <a href="{% url 'account_login' %}" class="hover:underline">Вход</a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <hr class="my-6 border-gray-200 sm:mx-auto lg:my-8" />
+    <div class="sm:flex sm:items-center sm:justify-between">
+      <span class="text-sm text-gray-500 sm:text-center">© 2024 <a href="https://amgold.ru/about/" class="hover:underline">Александр Голдовский</a>.
+      </span>
+      <div class="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
+        <a href="https://github.com/hazadus" class="text-gray-500 hover:text-gray-900">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" /></svg>
+        </a>
+        <a href="https://t.me/hazadus" class="text-gray-500 hover:text-gray-900">
+          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19c-.14.75-.42 1-.68 1.03c-.58.05-1.02-.38-1.58-.75c-.88-.58-1.38-.94-2.23-1.5c-.99-.65-.35-1.01.22-1.59c.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02c-.09.02-1.49.95-4.22 2.79c-.4.27-.76.41-1.08.4c-.36-.01-1.04-.2-1.55-.37c-.63-.2-1.12-.31-1.08-.66c.02-.18.27-.36.74-.55c2.92-1.27 4.86-2.11 5.83-2.51c2.78-1.16 3.35-1.36 3.73-1.36c.08 0 .27.02.39.12c.1.08.13.19.14.27c-.01.06.01.24 0 .38"/></svg>
+        </a>
+        <a href="https://fosstodon.org/@hazadus" class="text-gray-500 hover:text-gray-900">
+          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M20.94 14c-.28 1.41-2.44 2.96-4.97 3.26c-1.31.15-2.6.3-3.97.24c-2.25-.11-4-.54-4-.54v.62c.32 2.22 2.22 2.35 4.03 2.42c1.82.05 3.44-.46 3.44-.46l.08 1.65s-1.28.68-3.55.81c-1.25.07-2.81-.03-4.62-.5c-3.92-1.05-4.6-5.24-4.7-9.5l-.01-3.43c0-4.34 2.83-5.61 2.83-5.61C6.95 2.3 9.41 2 11.97 2h.06c2.56 0 5.02.3 6.47.96c0 0 2.83 1.27 2.83 5.61c0 0 .04 3.21-.39 5.43M18 8.91c0-1.08-.3-1.91-.85-2.56c-.56-.63-1.3-.96-2.23-.96c-1.06 0-1.87.41-2.42 1.23l-.5.88l-.5-.88c-.56-.82-1.36-1.23-2.43-1.23c-.92 0-1.66.33-2.23.96C6.29 7 6 7.83 6 8.91v5.26h2.1V9.06c0-1.06.45-1.62 1.36-1.62c1 0 1.5.65 1.5 1.93v2.79h2.07V9.37c0-1.28.5-1.93 1.51-1.93c.9 0 1.35.56 1.35 1.62v5.11H18z"/></svg>
+        </a>
+        <a href="https://amgold.ru" class="text-gray-500 hover:text-gray-900">
+          <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M16.36 14c.08-.66.14-1.32.14-2s-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2m-5.15 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95a8.03 8.03 0 0 1-4.33 3.56M14.34 14H9.66c-.1-.66-.16-1.32-.16-2s.06-1.35.16-2h4.68c.09.65.16 1.32.16 2s-.07 1.34-.16 2M12 19.96c-.83-1.2-1.5-2.53-1.91-3.96h3.82c-.41 1.43-1.08 2.76-1.91 3.96M8 8H5.08A7.92 7.92 0 0 1 9.4 4.44C8.8 5.55 8.35 6.75 8 8m-2.92 8H8c.35 1.25.8 2.45 1.4 3.56A8 8 0 0 1 5.08 16m-.82-2C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2s.06 1.34.14 2M12 4.03c.83 1.2 1.5 2.54 1.91 3.97h-3.82c.41-1.43 1.08-2.77 1.91-3.97M18.92 8h-2.95a15.7 15.7 0 0 0-1.38-3.56c1.84.63 3.37 1.9 4.33 3.56M12 2C6.47 2 2 6.5 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
