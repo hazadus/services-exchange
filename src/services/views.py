@@ -8,6 +8,7 @@ from django.views.generic import (
     ListView,
     UpdateView,
 )
+from django_project.rds import redis
 from exchange.selectors import (
     category_get_by_id,
     category_list_only_available,
@@ -85,6 +86,12 @@ class ServiceDetailView(DetailView):
             )
 
         return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        service = self.get_object()
+        context["total_views"] = redis.incr(f"service:{service.pk}:views")
+        return context
 
 
 class ServiceCreateView(LoginRequiredMixin, CreateView):

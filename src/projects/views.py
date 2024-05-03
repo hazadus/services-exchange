@@ -14,6 +14,7 @@ from django.views.generic import (
     ListView,
     UpdateView,
 )
+from django_project.rds import redis
 from exchange.selectors import (
     category_get_by_id,
     category_list_only_available,
@@ -116,6 +117,7 @@ class ProjectDetailView(DetailView):
             project_id=project.pk, user=self.request.user
         )
 
+        context["total_views"] = redis.incr(f"project:{project.pk}:views")
         return context
 
 

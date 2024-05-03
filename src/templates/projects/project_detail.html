@@ -57,7 +57,7 @@
       <!-- Кол-во откликов / кнопки -->
       <div class="flex items-center">
         <div class="flex-1 text-sm text-gray-500 font-thin">
-          Предложений: {{ project.offers.count }}{# Тут будут все предложения, включая уже отклоненные. #}
+          Просмотров: {{ total_views }} &middot; Предложений: {{ project.offers.count }}{# Тут будут все предложения, включая уже отклоненные. #}
         </div>
         <div>
           {% if user == project.customer and not order %}
