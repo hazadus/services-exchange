@@ -9,6 +9,7 @@ class CustomUserFactory(factory.django.DjangoModelFactory):
         model = CustomUser
 
     username = factory.LazyAttribute(lambda _: faker.user_name())
+    password = "password"
     email = factory.LazyAttribute(lambda _: faker.email())
 
     class Params:
@@ -20,3 +21,11 @@ class CustomUserFactory(factory.django.DjangoModelFactory):
         with_country = factory.Trait(country=faker.country())
         with_city = factory.Trait(city=faker.city())
         with_phone = factory.Trait(phone=faker.phone_number())
+
+    @classmethod
+    def _create(cls, model_class, *args, **kwargs):
+        """Установим пользователю пароль, как положено."""
+        user = super()._create(model_class, *args, **kwargs)
+        user.set_password(cls.password)
+        user.save()
+        return user
