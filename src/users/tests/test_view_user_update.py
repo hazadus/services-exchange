@@ -3,6 +3,7 @@ from http import HTTPStatus
 from django.test import TestCase
 from django.urls import reverse
 
+from users.models import CustomUser
 from users.tests.factories import CustomUserFactory
 
 
@@ -42,3 +43,42 @@ class CustomUserUpdateViewTest(TestCase):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    def test_update_view_works_with_correct_data(self):
+        self.given_user_logged_in()
+
+        new_username = "newUsername"
+        new_first_name = "New First Name"
+        new_last_name = "New Last Name"
+        new_speciality = "New Speciality"
+        new_description = "New Description"
+        new_country = "New Country"
+        new_city = "New City"
+        new_phone = "+7(000)000-00-00"
+
+        url = reverse("users:update", kwargs={"pk": self.user.pk})
+        response = self.client.post(
+            url,
+            data={
+                "username": new_username,
+                "first_name": new_first_name,
+                "last_name": new_last_name,
+                "speciality": new_speciality,
+                "description": new_description,
+                "country": new_country,
+                "city": new_city,
+                "phone": new_phone,
+            },
+            follow=True,
+        )
+
+        updated_user = CustomUser.objects.get(pk=self.user.pk)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(updated_user.username, new_username)
+        self.assertEqual(updated_user.first_name, new_first_name)
+        self.assertEqual(updated_user.last_name, new_last_name)
+        self.assertEqual(updated_user.speciality, new_speciality)
+        self.assertEqual(updated_user.description, new_description)
+        self.assertEqual(updated_user.country, new_country)
+        self.assertEqual(updated_user.city, new_city)
+        self.assertEqual(updated_user.phone, new_phone)
