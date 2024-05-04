@@ -12,6 +12,9 @@
     - [django-debug-toolbar](https://django-debug-toolbar.readthedocs.io/en/latest/): Best debugging tool for Django.
 - [Celery](https://docs.celeryq.dev/en/stable/index.html): simple, flexible, and reliable distributed system to process vast amounts of messages, while providing operations with the tools required to maintain such a system.
 - [redis-py](https://github.com/redis/redis-py): Redis Python client.
+- Тесты
+  - factory-boy
+  - Faker
 - Оформление:
   - [Tailwind CSS](https://tailwindcss.com/)
   - [crispy-tailwind](https://django-crispy-forms.github.io/crispy-tailwind/getting_started.html#installation)
