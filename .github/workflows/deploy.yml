@@ -10,6 +10,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  qa:
+    name: Quality Assurance
+    uses: ./.github/workflows/qa.yml
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
