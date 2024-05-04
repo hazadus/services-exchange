@@ -25,6 +25,8 @@
 
 ```bash
 SECRET_KEY="long-random-string"
+# Опционально для запуска на сервере – Sentry DSN:
+SENTRY_DSN="sentry-dsn-..."
 ```
 
 ### Запуск в режиме разработки
