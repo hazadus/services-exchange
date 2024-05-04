@@ -43,4 +43,4 @@ jobs:
           DB_PASSWORD: postgres
           DB_HOST: db
           DB_PORT: 5432
-        run: python src/manage.py collectstatic && python src/manage.py test
+        run: python src/manage.py collectstatic && cd ./src && python manage.py test
