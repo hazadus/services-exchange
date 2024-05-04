@@ -1,10 +1,10 @@
 from http import HTTPStatus
 
+from core.tests.factories import CustomUserFactory
 from django.test import TestCase
 from django.urls import reverse
 
 from users.models import CustomUser
-from users.tests.factories import CustomUserFactory
 
 
 class CustomUserUpdateViewTest(TestCase):

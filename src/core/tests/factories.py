@@ -1,7 +1,8 @@
 import factory
-from core.tests import faker
-
+from exchange.models import Category
 from users.models import CustomUser
+
+from core.tests import faker
 
 
 class CustomUserFactory(factory.django.DjangoModelFactory):
@@ -29,3 +30,10 @@ class CustomUserFactory(factory.django.DjangoModelFactory):
         user.set_password(cls.password)
         user.save()
         return user
+
+
+class CategoryFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Category
+
+    title = factory.LazyAttribute(lambda _: faker.words(nb=5)[70:])

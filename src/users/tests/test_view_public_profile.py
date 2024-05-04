@@ -1,8 +1,7 @@
 from http import HTTPStatus
 
+from core.tests.factories import CustomUserFactory
 from django.test import TestCase
-
-from users.tests.factories import CustomUserFactory
 
 
 class CustomUserPublicProfileViewTest(TestCase):
