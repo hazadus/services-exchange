@@ -9,6 +9,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}{% endblock title %} – Биржа Услуг</title>
   <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+  {% if not debug %}
+    <script async src="https://stats.hazadus.ru/script.js" data-website-id="3cab6bfb-b194-4677-9e10-0841ab0f6df1"></script>
+  {% endif %}
 </head>
 
 <body class="bg-white">
