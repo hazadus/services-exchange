@@ -8,7 +8,16 @@ from users.tests.factories import CustomUserFactory
 class CustomUserPublicProfileViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.user = CustomUserFactory()
+        cls.user = CustomUserFactory(
+            with_first_name=True,
+            with_last_name=True,
+            with_speciality=True,
+            with_skills=True,
+            with_description=True,
+            with_country=True,
+            with_city=True,
+            with_phone=True,
+        )
 
     def test_public_profile_view_available(self):
         """Публичный профиль пользователя доступен по ссылке, может быть просмотрен
@@ -22,3 +31,5 @@ class CustomUserPublicProfileViewTest(TestCase):
         self.assertContains(response, self.user.description)
         self.assertContains(response, self.user.country)
         self.assertContains(response, self.user.city)
+        for skill in self.user.skills:
+            self.assertContains(response, skill)

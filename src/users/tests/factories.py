@@ -10,12 +10,13 @@ class CustomUserFactory(factory.django.DjangoModelFactory):
 
     username = factory.LazyAttribute(lambda _: faker.user_name())
     email = factory.LazyAttribute(lambda _: faker.email())
-    first_name = factory.LazyAttribute(lambda _: faker.first_name())
-    last_name = factory.LazyAttribute(lambda _: faker.last_name())
-    # TODO: use traits for nullable fields
-    speciality = factory.LazyAttribute(lambda _: faker.sentence()[:50])
-    description = factory.LazyAttribute(lambda _: " ".join(faker.sentences(nb=5)))
-    # TODO: skills?
-    country = factory.LazyAttribute(lambda _: faker.country())
-    city = factory.LazyAttribute(lambda _: faker.city())
-    phone = factory.LazyAttribute(lambda _: faker.phone_number())
+
+    class Params:
+        with_first_name = factory.Trait(first_name=faker.first_name())
+        with_last_name = factory.Trait(last_name=faker.last_name())
+        with_speciality = factory.Trait(speciality=faker.sentence()[:50])
+        with_skills = factory.Trait(skills=faker.words(nb=10))
+        with_description = factory.Trait(description=" ".join(faker.sentences(nb=5)))
+        with_country = factory.Trait(country=faker.country())
+        with_city = factory.Trait(city=faker.city())
+        with_phone = factory.Trait(phone=faker.phone_number())
