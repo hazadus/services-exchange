@@ -6,6 +6,7 @@ from projects.models import Project
 from services.models import Service
 
 from users.models import Action, CustomUser
+from users.selectors import user_get_by_id
 
 
 def action_create(user, verb: str, target=None) -> None:
@@ -30,10 +31,11 @@ def action_create(user, verb: str, target=None) -> None:
         Action.objects.create(user=user, verb=verb, target=target)
 
 
-def user_pay_from_balance(user: CustomUser, item: Project | Service) -> bool:
+def user_pay_from_balance(user_id: int, item: Project | Service) -> bool:
     """Уменьшает баланс пользователя на сайте на размер стоимости услуги или проекта,
     если на балансе достаточно средств."""
-    if user.balance < item.price:
+    user = user_get_by_id(user_id=user_id)
+    if user is None or user.balance < item.price:
         return False
 
     user.balance -= item.price

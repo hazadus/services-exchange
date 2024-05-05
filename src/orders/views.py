@@ -36,7 +36,7 @@ def order_service_create_view(request: HttpRequest) -> HttpResponse:
         if not service:
             raise Http404
 
-        is_paid = user_pay_from_balance(user=request.user, item=service)
+        is_paid = user_pay_from_balance(user_id=request.user.pk, item=service)
         if not is_paid:
             messages.warning(
                 request,

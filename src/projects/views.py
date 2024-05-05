@@ -118,7 +118,7 @@ class ProjectDetailView(DetailView):
 
         context["offers"] = offer_list(project_id=project.pk, candidate=candidate)
         context["order"] = order_get_by_project_id(
-            project_id=project.pk, user=candidate
+            project_id=project.pk, user=self.request.user
         )
 
         context["total_views"] = redis.incr(f"project:{project.pk}:views")

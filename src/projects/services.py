@@ -33,7 +33,7 @@ def offer_set_status(offer: Offer, new_status: str, actor: CustomUser) -> None:
         case "accepted":
             if (offer.status == "created") and (offer.project.customer == actor):
                 is_paid = user_pay_from_balance(
-                    user=offer.project.customer, item=offer.project
+                    user_id=offer.project.customer.pk, item=offer.project
                 )
                 if not is_paid:
                     return
@@ -46,6 +46,9 @@ def offer_set_status(offer: Offer, new_status: str, actor: CustomUser) -> None:
                     .all()
                 )
                 other_offers.update(is_cancelled=True, status="declined")
+                # Помечаем проект как "не активный", т.к. на него уже будет создан заказ.
+                offer.project.is_active = False
+                offer.project.save()
                 # Create order for this project
                 order_create(
                     customer=offer.project.customer,

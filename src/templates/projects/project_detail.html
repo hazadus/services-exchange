@@ -39,7 +39,7 @@
         {{ project.description|linebreaksbr }}
       </p>
 
-      <!-- О покупателе -->
+      <!-- MARK: О покупателе -->
       <div class="flex mb-2">
         <a href="{% url 'users:public_profile' project.customer.username %}">
           {% if project.customer.profile_image %}
@@ -79,7 +79,7 @@
     </div>
 
     {% if order %}
-      <!-- Инфо о заказе на проект (видно только заказчику и исполнителю) -->
+      <!-- MARK: Инфо о заказе на проект (видно только заказчику и исполнителю) -->
       <div class="border border-gray-100 p-4 mb-4">
         <div class="flex items-center">
           <div class="flex-1">
@@ -93,10 +93,15 @@
     {% endif %}
 
     {% if offers.count %}
+      <!-- MARK: Предложения по проекту -->
       <div class="border border-gray-100 p-4 mb-4">
         {% if user == project.customer %}
           {# Для заказчика проекта показываем все предложения #}
           <h1 class="text-xl font-semibold mb-2">Предложения исполнителей</h1>
+          
+          {% if user.balance < project.price and project.is_active %}
+            {% include "alert.html" with message="На вашем балансе недостаточно средств, чтобы принять заявку на выполнение проекта." style="warning" %}
+          {% endif %}
 
           <div class="flex flex-col">
             {% for offer in offers %}
