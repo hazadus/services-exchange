@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -75,6 +76,8 @@ class ServiceDetailView(DetailView):
         Просмотры пользователем своих услуг фиксировать не будем.
         """
         service = self.get_object()
+        if service is None:
+            raise Http404
 
         if self.request.user.is_authenticated and (
             service.provider != self.request.user
@@ -90,7 +93,8 @@ class ServiceDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         service = self.get_object()
-        context["total_views"] = redis.incr(f"service:{service.pk}:views")
+        if service is not None:
+            context["total_views"] = redis.incr(f"service:{service.pk}:views")
         return context
 
 

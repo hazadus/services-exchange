@@ -91,6 +91,8 @@ class ProjectDetailView(DetailView):
         Просмотры пользователем своих проектов фиксировать не будем.
         """
         project = self.get_object()
+        if project is None:
+            raise Http404
 
         if self.request.user.is_authenticated and (
             project.customer != self.request.user
