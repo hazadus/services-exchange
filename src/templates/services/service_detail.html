@@ -70,6 +70,13 @@
               <input type="hidden" name="service_id" value="{{ service.pk }}">
               <button class="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Заказать за {{ service.price }} ₽</button>
             </form>
+
+            {% if user.is_authenticated and user.balance < service.price %}
+              <div class="mt-2 text-sm text-yellow-600">
+                  На вашем балансе недостаточно средств для заказа этой услуги. Вы можете
+                  <a href="{% url 'users:update_balance' %}" class="underline">пополнить баланс</a>.
+              </div>
+            {% endif %}
           </div>
         {% endif %}
 
