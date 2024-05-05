@@ -31,8 +31,9 @@
 - [Django](https://docs.djangoproject.com/)
     - [django-allauth](https://pypi.org/project/django-allauth/): Integrated set of Django applications addressing authentication, registration, account management as well as 3rd party (social) account authentication.
     - [django-debug-toolbar](https://django-debug-toolbar.readthedocs.io/en/latest/): Best debugging tool for Django.
-- [Celery](https://docs.celeryq.dev/en/stable/index.html): simple, flexible, and reliable distributed system to process vast amounts of messages, while providing operations with the tools required to maintain such a system.
-- [redis-py](https://github.com/redis/redis-py): Redis Python client.
+- Очередь задач
+  - [Celery](https://docs.celeryq.dev/en/stable/index.html): simple, flexible, and reliable distributed system to process vast amounts of messages, while providing operations with the tools required to maintain such a system.
+  - [redis-py](https://github.com/redis/redis-py): Redis Python client.
 - Тесты
   - [factory-boy](https://factoryboy.readthedocs.io/en/stable/recipes.html)
   - [Faker](https://faker.readthedocs.io/en/master/)
@@ -41,6 +42,11 @@
   - [crispy-tailwind](https://django-crispy-forms.github.io/crispy-tailwind/getting_started.html#installation)
 - Прочее:
   - [environs](https://pypi.org/project/environs/): `environs` is a Python library for parsing environment variables. 
+- Для работы в проде:
+  - [gunicorn](https://github.com/benoitc/gunicorn): WSGI HTTP Server for UNIX, fast clients and sleepy applications. 
+  - [whitenoise](https://github.com/evansd/whitenoise): Radically simplified static file serving for Python web apps.
+  - [nginx](https://nginx.org/): nginx *(engine x)* is an HTTP and reverse proxy server, a mail proxy server, and a 
+    generic TCP/UDP proxy server, originally written by Igor Sysoev.
 
 ## Немного о структуре приложения
 
