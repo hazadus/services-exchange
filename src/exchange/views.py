@@ -56,7 +56,7 @@ def message_create_view(request: HttpRequest) -> HttpResponse:
         recipient_id = data["recipient_id"]
         recipient = user_get_by_id(recipient_id)
         text = data["text"]
-        file = request.FILES["file"]
+        file = request.FILES.get("file", None)
 
         message = message_create(
             sender=sender, recipient=recipient, topic=order, text=text, file=file
